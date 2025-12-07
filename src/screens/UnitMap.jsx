@@ -10,18 +10,21 @@ import {
   X,
   ChevronRight,
   BookOpen,
-  User
+  User,
+  Sparkles,
+  Heart,
+  Settings
 } from 'lucide-react';
 
 // ==========================================
-// 1. DATOS (La estructura del Árbol)
+// 1. DATOS
 // ==========================================
 const courseData = [
   {
     id: 1,
-    title: "SECCIÓN 1: EL OJO DEL FOTÓGRAFO",
-    description: "Aprende a mirar antes de disparar",
-    themeColor: "green", // Tema VERDE
+    title: "SECCIÓN 1: FUNDAMENTOS",
+    description: "Domina la técnica base",
+    themeColor: "green", 
     units: [
       {
         id: 101,
@@ -39,7 +42,7 @@ const courseData = [
         id: 102,
         order: 2,
         title: "Composición Básica",
-        status: "current", // Unidad ACTUAL
+        status: "current", 
         icon: "image",
         lessons: [
           { id: "L2-1", title: "Regla de los Tercios", type: "reading", completed: true },
@@ -50,32 +53,26 @@ const courseData = [
       {
         id: 103,
         order: 3,
-        title: "Perspectiva y Ángulos",
+        title: "Ángulos",
         status: "locked",
         icon: "grid",
-        lessons: [
-          { id: "L3-1", title: "Ángulo Picado y Contrapicado", type: "reading", completed: false },
-          { id: "L3-2", title: "Perspectiva Forzada", type: "practice", completed: false }
-        ]
+        lessons: []
       }
     ]
   },
   {
     id: 2,
-    title: "SECCIÓN 2: DOMINANDO LA LUZ",
-    description: "Entiende cómo la luz afecta tu imagen",
-    themeColor: "blue", // Tema AZUL
+    title: "SECCIÓN 2: ILUMINACIÓN",
+    description: "Pinta con la luz",
+    themeColor: "blue",
     units: [
       {
         id: 201,
         order: 4,
-        title: "Tipos de Luz",
+        title: "Luz Natural",
         status: "locked",
         icon: "sun",
-        lessons: [
-          { id: "L4-1", title: "Luz Dura vs Luz Suave", type: "reading", completed: false },
-          { id: "L4-2", title: "Temperatura de Color", type: "quiz", completed: false }
-        ]
+        lessons: []
       },
       {
         id: 202,
@@ -134,8 +131,8 @@ const LessonItem = ({ lesson, index, isCurrent, onStart }) => {
       {isCurrent && (
         <button
           onClick={(e) => {
-            e.stopPropagation(); // Evita cerrar el popover al hacer click
-            onStart(); // Navega a la lección
+            e.stopPropagation();
+            onStart(); 
           }}
           className="px-4 py-1.5 bg-gradient-to-r from-[#ffaf45] to-[#ffd76a] text-[#24140f] text-xs font-black rounded-full shadow-[0_10px_24px_rgba(255,215,106,0.35)] hover:brightness-105 transform transition active:scale-95 flex items-center gap-1"
         >
@@ -161,8 +158,7 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
 
   return (
     <div className="absolute z-40 left-1/2 transform -translate-x-1/2 mt-24 w-72 md:w-80 bg-[#120f33] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)] border border-white/10 animate-in zoom-in-95 duration-200 origin-top">
-
-      {/* Triángulo indicador */}
+      {/* Triángulo */}
       <div className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 rotate-45 ${headerColor}`}></div>
 
       {/* Encabezado */}
@@ -179,7 +175,7 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
         </p>
       </div>
 
-      {/* Lista de Lecciones */}
+      {/* Lista */}
       <div className="p-3 max-h-64 overflow-y-auto custom-scrollbar">
         {unit.lessons.length > 0 ? (
           unit.lessons.map((lesson, idx) => (
@@ -203,7 +199,7 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
 };
 
 // ==========================================
-// 4. NODO DE UNIDAD (CÍRCULO)
+// 4. NODO DE UNIDAD
 // ==========================================
 const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => {
   const themeColors = {
@@ -225,17 +221,14 @@ const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => 
   let ringClass = "";
   let IconComponent = Lock;
   let scaleEffect = "";
-  let iconClass = "text-white/50";
 
   if (unit.status === 'completed') {
     bgColor = currentTheme.bg; 
     IconComponent = Check;
-    iconClass = "text-white";
   } else if (unit.status === 'current') {
     bgColor = currentTheme.active;
     ringClass = `ring-4 ${currentTheme.ring} ring-offset-4 ring-offset-[#0f102c]`;
     IconComponent = () => <IconMap name={unit.icon} className="w-8 h-8 text-white" />;
-    iconClass = "text-white";
     scaleEffect = "scale-110 shadow-[0_0_30px_rgba(122,214,255,0.4)]";
   } else {
     IconComponent = () => <IconMap name={unit.icon} className="w-6 h-6 text-white/60" />;
@@ -243,7 +236,6 @@ const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => 
 
   return (
     <div className="relative flex flex-col items-center justify-center py-4 z-10 w-full">
-      {/* Popover */}
       {isSelected && (
         <>
           <div className="fixed inset-0 z-20 cursor-default" onClick={() => onSelect(null)}></div>
@@ -256,7 +248,6 @@ const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => 
         </>
       )}
 
-      {/* Círculo Principal */}
       <button
         onClick={onSelect}
         className={`
@@ -274,7 +265,6 @@ const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => 
         )}
       </button>
 
-      {/* Etiqueta */}
       <div className="mt-3 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-sm border border-white/10 z-10">
         <span className="text-xs font-bold text-white/70 uppercase tracking-wide">
           Unidad {unit.order}
@@ -307,115 +297,44 @@ const SectionHeader = ({ section }) => {
 // ==========================================
 // 6. COMPONENTE PRINCIPAL (EXPORT)
 // ==========================================
-export default function UnitMap({ onStartLesson, onExit }) {
+export default function UnitMap({ onStartLesson }) {
   const [selectedUnitId, setSelectedUnitId] = useState(null);
-  const [activeTab, setActiveTab] = useState('ruta');
 
   const handleUnitSelect = (unitId) => {
     setSelectedUnitId(prev => prev === unitId ? null : unitId);
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-[#0d0f2f] via-[#0b0d29] to-[#090820] text-white pb-28">
+    <div className="flex flex-col items-center px-4 py-4 w-full">
+      {courseData.map((section) => (
+        <div key={section.id} className="flex flex-col items-center w-full">
 
-      {/* Barra Superior del Mapa */}
+          {/* Header de Sección */}
+          <SectionHeader section={section} />
 
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex flex-col text-right leading-tight">
-            <span className="text-[11px] uppercase text-white/60">Nivel</span>
-            <span className="font-bold text-white">Explorador</span>
-          </div>
-          <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-[#ffb347] to-[#ffd76a] px-3 py-2 text-[#201114] font-black shadow-[0_12px_30px_rgba(255,200,90,0.35)]">
-            <Sun className="fill-current" size={18} />
-            <span>1250 XP</span>
-          </div>
-        </div>
-      </header>
+          {/* Unidades */}
+          <div className="relative w-full flex flex-col items-center gap-8 px-4">
 
-      {/* Contenido del Mapa */}
-      <div className="flex flex-col items-center px-4 py-4">
-        {activeTab === 'ruta' && (
-          <div className="w-full">
-            {courseData.map((section) => (
-              <div key={section.id} className="flex flex-col items-center w-full">
+            {/* Conector */}
+            {section.units.length > 0 && (
+                <div className="absolute top-2 bottom-10 w-[14px] rounded-full bg-gradient-to-b from-white/10 via-white/5 to-transparent z-0"></div>
+            )}
 
-                {/* Header de Sección */}
-                <SectionHeader section={section} />
-
-                {/* Unidades */}
-                <div className="relative w-full flex flex-col items-center gap-8 px-4">
-
-                  {/* Conector */}
-                  {section.units.length > 0 && (
-                     <div className="absolute top-2 bottom-10 w-[14px] rounded-full bg-gradient-to-b from-white/10 via-white/5 to-transparent z-0"></div>
-                  )}
-
-                  {section.units.map((unit) => (
-                    <UnitNode
-                      key={unit.id}
-                      unit={unit}
-                      colorTheme={section.themeColor}
-                      isSelected={selectedUnitId === unit.id}
-                      onSelect={() => handleUnitSelect(unit.id)}
-                      onStartLesson={onStartLesson}
-                    />
-                  ))}
-                </div>
-
-                <div className="h-10"></div>
-              </div>
+            {section.units.map((unit) => (
+              <UnitNode
+                key={unit.id}
+                unit={unit}
+                colorTheme={section.themeColor}
+                isSelected={selectedUnitId === unit.id}
+                onSelect={() => handleUnitSelect(unit.id)}
+                onStartLesson={onStartLesson}
+              />
             ))}
           </div>
-        )}
 
-        {activeTab === 'teoria' && (
-          <div className="mt-6 w-full max-w-xl rounded-2xl border border-white/10 bg-white/5 p-6 text-center shadow-[0_15px_60px_rgba(0,0,0,0.35)]">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#5d7dff] to-[#6fe0ff] text-white shadow-[0_0_25px_rgba(111,224,255,0.35)]">
-              <BookOpen />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Biblioteca Teórica</h3>
-            <p className="text-white/70 text-sm">Pronto podrás acceder aquí a lecturas, referencias y ejercicios complementarios.</p>
-          </div>
-        )}
-
-        {activeTab === 'perfil' && (
-          <div className="mt-6 w-full max-w-xl rounded-2xl border border-white/10 bg-white/5 p-6 text-center shadow-[0_15px_60px_rgba(0,0,0,0.35)]">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#ffb347] to-[#ffd76a] text-[#2a1b18] shadow-[0_0_25px_rgba(255,215,106,0.35)]">
-              <User />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Tu Perfil</h3>
-            <p className="text-white/70 text-sm">Configura tu cuenta, logros y preferencias desde este panel.</p>
-          </div>
-        )}
-      </div>
-
-      {/* Barra inferior */}
-      <nav className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-md rounded-2xl border border-white/10 bg-[#0f102c]/90 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-        <div className="grid grid-cols-3 divide-x divide-white/5 text-sm text-white/60">
-          <button
-            onClick={() => setActiveTab('ruta')}
-            className={`flex flex-col items-center gap-1 py-3 transition ${activeTab === 'ruta' ? 'text-[#ffd76a]' : 'hover:text-white'}`}
-          >
-            <Camera size={22} />
-            <span className="text-[11px] font-semibold uppercase tracking-wide">Ruta</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('teoria')}
-            className={`flex flex-col items-center gap-1 py-3 transition ${activeTab === 'teoria' ? 'text-[#6fe0ff]' : 'hover:text-white'}`}
-          >
-            <BookOpen size={22} />
-            <span className="text-[11px] font-semibold uppercase tracking-wide">Teoría</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('perfil')}
-            className={`flex flex-col items-center gap-1 py-3 transition ${activeTab === 'perfil' ? 'text-[#ffaf45]' : 'hover:text-white'}`}
-          >
-            <User size={22} />
-            <span className="text-[11px] font-semibold uppercase tracking-wide">Perfil</span>
-          </button>
+          <div className="h-10"></div>
         </div>
-      </nav>
+      ))}
     </div>
   );
 }
