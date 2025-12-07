@@ -405,7 +405,7 @@ const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => 
           )}
         </button>
 
-        <span className="px-3 py-1 rounded-full bg-orange-500 text-white font-semibold uppercase tracking-wide shadow-lg">
+        <span className="px-3 py-1 rounded-full bg-orange-500 text-white font-semibold uppercase tracking-wide shadow-lg mt-2">
           Unidad {unit.order}
         </span>
       </div>
@@ -422,7 +422,7 @@ const SectionHeader = ({ section }) => {
     : 'bg-gradient-to-r from-[#45d0a8] via-[#39c39a] to-[#4ae8c0]';
 
   return (
-    <div className={`${bgClass} text-white py-6 px-6 text-center shadow-md mb-8 w-full sticky top-[72px] z-20 rounded-2xl border border-white/10`}>
+    <div className={`${bgClass} text-white py-6 px-6 text-center shadow-md mb-12 w-full sticky top-[72px] z-20 rounded-2xl border border-white/10`}>
       <h2 className="text-xl md:text-2xl font-black uppercase tracking-[0.28em] mb-1 drop-shadow-sm">
         {section.title}
       </h2>
