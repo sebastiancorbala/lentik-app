@@ -293,7 +293,7 @@ const SectionHeader = ({ section }) => {
 // ==========================================
 // 6. COMPONENTE PRINCIPAL (EXPORT)
 // ==========================================
-export default function UnitMap({ onStartLesson }) {
+export default function UnitMap({ onStartLesson, onExit }) {
   const [selectedUnitId, setSelectedUnitId] = useState(null);
 
   const handleUnitSelect = (unitId) => {
@@ -305,7 +305,14 @@ export default function UnitMap({ onStartLesson }) {
       
       {/* Barra Superior del Mapa */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 px-4 py-3 flex justify-between items-center shadow-sm h-[60px]">
-        <X size={24} className="text-gray-400 cursor-pointer" />
+        <button
+          type="button"
+          onClick={() => onExit?.()}
+          className="text-gray-400 hover:text-gray-600 transition-colors"
+          aria-label="Volver al inicio"
+        >
+          <X size={24} className="cursor-pointer" />
+        </button>
         <div className="w-full mx-4 h-3 bg-gray-200 rounded-full overflow-hidden relative">
            <div className="absolute top-0 left-0 h-full bg-yellow-400 w-[15%] rounded-full opacity-30"></div>
            <div className="h-full bg-green-500 w-[35%] rounded-full shadow-inner"></div>
