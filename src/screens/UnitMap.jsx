@@ -22,8 +22,8 @@ import {
 const courseData = [
   {
     id: 1,
-    title: "SECCIÓN 1: EL OJO DEL FOTÓGRAFO",
-    description: "Mejora tus fotos aprendiendo a mirar sin tocar botones complicados.",
+    title: "SECCIÓN 1: EL OJO DEL FOTÓGRAFO (Conceptos Básicos)",
+    description: "Mejora tus fotos sin tocar botones complicados, solo aprendiendo a mirar.",
     themeColor: "green",
     units: [
       {
@@ -62,8 +62,8 @@ const courseData = [
   },
   {
     id: 2,
-    title: "SECCIÓN 2: DOMINANDO LA LUZ",
-    description: "Entramos a lo técnico: introducimos las variables una por una.",
+    title: "SECCIÓN 2: DOMINANDO LA LUZ (El Triángulo de Exposición - Parte A)",
+    description: "Entramos a la parte técnica, introduciendo las variables una por una.",
     themeColor: "blue",
     units: [
       {
@@ -77,7 +77,7 @@ const courseData = [
       {
         id: 202,
         order: 5,
-        title: "Velocidad de Obturación",
+        title: "Velocidad de Obturación (Shutter Speed)",
         status: "locked",
         icon: "camera",
         lessons: []
@@ -88,25 +88,23 @@ const courseData = [
         title: "La Apertura (Diafragma)",
         status: "locked",
         icon: "image",
-        lessons: []
+
       }
     ]
   },
   {
     id: 3,
-    title: "SECCIÓN 3: CALIDAD Y CONTROL",
-    description: "Conceptos más abstractos para completar el modo manual.",
+    title: "SECCIÓN 3: CALIDAD Y CONTROL (El Triángulo - Parte B)",
+    description: "Conceptos más abstractos que completan el modo manual.",
     themeColor: "green",
     units: [
-      { id: 301, order: 7, title: "ISO (Sensibilidad)", status: "locked", icon: "sparkles", lessons: [] },
-      { id: 302, order: 8, title: "El Exposímetro", status: "locked", icon: "grid", lessons: [] },
-      { id: 303, order: 9, title: "Modo Manual", status: "locked", icon: "camera", lessons: [] }
+
     ]
   },
   {
     id: 4,
     title: "SECCIÓN 4: COMPOSICIÓN AVANZADA",
-    description: "Volvemos a la creatividad con herramientas más sofisticadas.",
+    description: "Volvemos a la creatividad, pero con herramientas más sofisticadas.",
     themeColor: "blue",
     units: [
       { id: 401, order: 10, title: "Líneas y Geometría", status: "locked", icon: "grid", lessons: [] },
@@ -115,7 +113,7 @@ const courseData = [
   },
   {
     id: 5,
-    title: "SECCIÓN 5: LUZ Y COLOR",
+    title: "SECCIÓN 5: LUZ Y COLOR (Nivel Pro)",
     description: "El toque final para fotos profesionales.",
     themeColor: "green",
     units: [
@@ -139,6 +137,62 @@ const IconMap = ({ name, className }) => {
     case 'sun': return <Sun className={className} />;
     default: return <Star className={className} />;
   }
+};
+
+const InlineLessonList = ({ unit, colorTheme }) => {
+  const accentGradient = colorTheme === 'blue'
+    ? 'from-[#5d7dff] via-[#546df6] to-[#5ab8ff]'
+    : 'from-[#4ad3a3] via-[#43c498] to-[#4fdfb2]';
+
+  const activeLessonIndex = unit.lessons.findIndex((lesson) => !lesson.completed);
+  const effectiveActiveIndex = activeLessonIndex === -1 ? unit.lessons.length - 1 : activeLessonIndex;
+
+  return (
+    <div className="w-full max-w-xl mt-4 bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+      <div className="flex items-center justify-between px-4 py-3 bg-black/20 border-b border-white/10">
+        <span className="text-xs font-bold uppercase tracking-[0.25em] text-white/70">Lecciones</span>
+        <span className="text-white/60 text-xs">{unit.lessons.length} en total</span>
+      </div>
+      <ul className="divide-y divide-white/5">
+        {unit.lessons.map((lesson, idx) => {
+          const isLocked = unit.status === 'locked';
+          const isActive = idx === effectiveActiveIndex && !isLocked;
+          const isDone = lesson.completed;
+
+          let badgeClass = 'bg-white/10 text-white/70 border border-white/10';
+          let badgeContent = idx + 1;
+
+          if (isLocked) {
+            badgeClass = 'bg-black/30 text-white/40 border border-white/5';
+            badgeContent = <Lock size={14} />;
+          } else if (isDone) {
+            badgeClass = 'bg-gradient-to-br from-[#4ad3a3] to-[#5be8c0] text-white shadow-[0_0_12px_rgba(90,232,192,0.35)] border-0';
+            badgeContent = <Check size={14} />;
+          } else if (isActive) {
+            badgeClass = 'bg-gradient-to-br from-[#ffaf45] to-[#ffd76a] text-[#24140f] shadow-[0_0_18px_rgba(255,215,106,0.35)] border-0 font-black';
+            badgeContent = 'GO';
+          }
+
+          return (
+            <li key={lesson.id} className="flex items-center gap-3 px-4 py-3 bg-white/0">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${badgeClass}`}>
+                {badgeContent}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-white text-sm font-semibold leading-tight">{lesson.title}</span>
+                <span className="text-white/50 text-xs mt-1">Lección {idx + 1}</span>
+              </div>
+              {isActive && (
+                <div className={`ml-auto px-3 py-1 text-[11px] font-bold rounded-full bg-gradient-to-r ${accentGradient} text-white uppercase tracking-wide shadow-[0_6px_18px_rgba(0,0,0,0.25)]`}>
+                  Próxima
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 };
 
 const LessonItem = ({ lesson, index, isCurrent, onStart, isAvailable }) => {
@@ -258,15 +312,6 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
     scaleEffect = `scale-110 ${yellowGlow}`;
   } else if (unit.status === 'completed') {
 
-    bgColor = "bg-gradient-to-br from-[#ffda6b] via-[#ffc233] to-[#ffb300]";
-    IconComponent = () => <Check className="w-8 h-8 text-[#2b1a00]" strokeWidth={4} />;
-  } else {
-    // Locked
-    bgColor = "bg-white/5";
-    IconComponent = () => <Lock className="w-6 h-6 text-white/40" />;
-
-    bgColor = baseGradient;
-
   }
 
   // FIX: Ajuste del z-index dinámico. 
@@ -279,10 +324,7 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
       {isSelected && (
         <>
           <div className="fixed inset-0 z-20 cursor-default" onClick={() => onSelect(null)}></div>
-          <UnitDetailCard 
-            unit={unit} 
-            colorTheme={colorTheme} 
-            onClose={() => onSelect(null)} 
+
             onStartLesson={onStartLesson}
           />
         </>
@@ -306,6 +348,8 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
           Unidad {unit.order}
         </span>
       </div>
+
+      <InlineLessonList unit={unit} colorTheme={colorTheme} />
     </div>
   );
 };
@@ -319,8 +363,7 @@ const SectionHeader = ({ section }) => {
     : 'bg-gradient-to-r from-[#45d0a8] via-[#39c39a] to-[#4ae8c0]';
 
   return (
-    // AJUSTADO: top-0 para pegarse al borde superior del área de scroll
-    <div className={`${bgClass} text-white py-5 px-5 text-center shadow-md mb-12 w-full sticky top-0 z-20 rounded-2xl border border-white/10`}>
+
       <h2 className="text-xl md:text-2xl font-black uppercase tracking-[0.28em] mb-1 drop-shadow-sm">
         {section.title}
       </h2>
