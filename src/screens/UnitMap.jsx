@@ -17,13 +17,13 @@ import {
 } from 'lucide-react';
 
 // ==========================================
-// 1. DATOS
+// 1. DATOS DEL PLAN DE ESTUDIOS
 // ==========================================
 const courseData = [
   {
     id: 1,
-    title: "SECCIÓN 1: EL OJO DEL FOTÓGRAFO (Conceptos Básicos)",
-    description: "Mejora tus fotos sin tocar botones complicados, solo aprendiendo a mirar.",
+    title: "SECCIÓN 1: EL OJO DEL FOTÓGRAFO",
+    description: "Mejora tus fotos aprendiendo a mirar sin tocar botones complicados.",
     themeColor: "green",
     units: [
       {
@@ -33,9 +33,9 @@ const courseData = [
         status: "completed",
         icon: "check",
         lessons: [
-          { id: "U1-L1", title: "¿Qué es el sujeto principal?", type: "quiz", completed: true },
+          { id: "U1-L1", title: "¿Qué es el sujeto principal? (Identificar al protagonista)", type: "quiz", completed: true },
           { id: "U1-L2", title: "El Enfoque (Nítido vs. Borroso)", type: "reading", completed: true },
-          { id: "U1-L3", title: "Bloqueo de enfoque", type: "practice", completed: true }
+          { id: "U1-L3", title: "Bloqueo de enfoque (La técnica de enfocar y reencuadrar)", type: "practice", completed: true }
         ]
       },
       {
@@ -45,9 +45,9 @@ const courseData = [
         status: "current",
         icon: "image",
         lessons: [
-          { id: "U2-L1", title: "Horizontal vs. Vertical", type: "reading", completed: false },
-          { id: "U2-L2", title: "Llenar el encuadre", type: "practice", completed: false },
-          { id: "U2-L3", title: "El horizonte recto", type: "quiz", completed: false }
+          { id: "U2-L1", title: "Horizontal vs. Vertical (Cuándo usar cuál)", type: "reading", completed: false },
+          { id: "U2-L2", title: "Llenar el encuadre (Acercarse más)", type: "practice", completed: false },
+          { id: "U2-L3", title: "El horizonte recto (Evitar fotos chuecas)", type: "quiz", completed: false }
         ]
       },
       {
@@ -56,14 +56,18 @@ const courseData = [
         title: "La Regla de los Tercios",
         status: "locked",
         icon: "grid",
-        lessons: []
+        lessons: [
+          { id: "U3-L1", title: "¿Qué es la cuadrícula? (Grid)", type: "reading", completed: false },
+          { id: "U3-L2", title: "Puntos de interés (Dónde poner al sujeto)", type: "practice", completed: false },
+          { id: "U3-L3", title: "Rompiendo la regla (Centrado simétrico)", type: "quiz", completed: false }
+        ]
       }
     ]
   },
   {
     id: 2,
-    title: "SECCIÓN 2: DOMINANDO LA LUZ (El Triángulo de Exposición - Parte A)",
-    description: "Entramos a la parte técnica, introduciendo las variables una por una.",
+    title: "SECCIÓN 2: DOMINANDO LA LUZ",
+    description: "Entramos a lo técnico: introducimos las variables una por una.",
     themeColor: "blue",
     units: [
       {
@@ -72,15 +76,22 @@ const courseData = [
         title: "Introducción a la Exposición",
         status: "locked",
         icon: "sun",
-        lessons: []
+        lessons: [
+          { id: "U4-L1", title: "Subexpuesta, Expuesta, Sobreexpuesta (Oscuro, Bien, Quemado)", type: "reading", completed: false },
+          { id: "U4-L2", title: "¿Qué es el Triángulo? (La metáfora de los tres lados)", type: "quiz", completed: false }
+        ]
       },
       {
         id: 202,
         order: 5,
-        title: "Velocidad de Obturación (Shutter Speed)",
+        title: "Velocidad de Obturación",
         status: "locked",
         icon: "camera",
-        lessons: []
+        lessons: [
+          { id: "U5-L1", title: "Congelar el movimiento (Deportes, niños)", type: "reading", completed: false },
+          { id: "U5-L2", title: "Capturar movimiento (Barridos, agua sedosa)", type: "practice", completed: false },
+          { id: "U5-L3", title: "Trepidación (¿Por qué mi foto sale movida con poca luz?)", type: "quiz", completed: false }
+        ]
       },
       {
         id: 203,
@@ -88,37 +99,118 @@ const courseData = [
         title: "La Apertura (Diafragma)",
         status: "locked",
         icon: "image",
-
+        lessons: [
+          { id: "U6-L1", title: "Números F (f/1.8 abierto vs. f/16 cerrado)", type: "reading", completed: false },
+          { id: "U6-L2", title: "Profundidad de Campo (El fondo borroso o Bokeh)", type: "practice", completed: false },
+          { id: "U6-L3", title: "Paisajes nítidos (Todo enfocado)", type: "quiz", completed: false }
+        ]
       }
     ]
   },
   {
     id: 3,
-    title: "SECCIÓN 3: CALIDAD Y CONTROL (El Triángulo - Parte B)",
-    description: "Conceptos más abstractos que completan el modo manual.",
+    title: "SECCIÓN 3: CALIDAD Y CONTROL",
+    description: "Conceptos más abstractos para completar el modo manual.",
     themeColor: "green",
     units: [
-
+      {
+        id: 301,
+        order: 7,
+        title: "ISO (Sensibilidad)",
+        status: "locked",
+        icon: "sparkles",
+        lessons: [
+          { id: "U7-L1", title: "¿Qué hace el ISO? (Luz artificial)", type: "reading", completed: false },
+          { id: "U7-L2", title: "El precio a pagar: Ruido digital (Grano)", type: "practice", completed: false },
+          { id: "U7-L3", title: "ISO Nativo vs. ISO Alto (Cuándo subirlo)", type: "quiz", completed: false }
+        ]
+      },
+      {
+        id: 302,
+        order: 8,
+        title: "El Exposímetro",
+        status: "locked",
+        icon: "grid",
+        lessons: [
+          { id: "U8-L1", title: "Leyendo la barra de exposición (-2 ... 0 ... +2)", type: "reading", completed: false },
+          { id: "U8-L2", title: "Modos de medición (Matricial vs. Puntual)", type: "quiz", completed: false }
+        ]
+      },
+      {
+        id: 303,
+        order: 9,
+        title: "Modo Manual (El Jefe Final)",
+        status: "locked",
+        icon: "camera",
+        lessons: [
+          { id: "U9-L1", title: "Equilibrando el triángulo (Si subo ISO, bajo tiempo...)", type: "practice", completed: false },
+          { id: "U9-L2", title: "Prioridad Apertura vs. Prioridad Velocidad (Modos A/Av y S/Tv)", type: "quiz", completed: false }
+        ]
+      }
     ]
   },
   {
     id: 4,
     title: "SECCIÓN 4: COMPOSICIÓN AVANZADA",
-    description: "Volvemos a la creatividad, pero con herramientas más sofisticadas.",
+    description: "Volvemos a la creatividad con herramientas más sofisticadas.",
     themeColor: "blue",
     units: [
-      { id: 401, order: 10, title: "Líneas y Geometría", status: "locked", icon: "grid", lessons: [] },
-      { id: 402, order: 11, title: "Perspectiva y Lentes", status: "locked", icon: "image", lessons: [] }
+      {
+        id: 401,
+        order: 10,
+        title: "Líneas y Geometría",
+        status: "locked",
+        icon: "grid",
+        lessons: [
+          { id: "U10-L1", title: "Líneas guía (Leading lines)", type: "reading", completed: false },
+          { id: "U10-L2", title: "Patrones y repetición", type: "practice", completed: false },
+          { id: "U10-L3", title: "Simetría perfecta", type: "quiz", completed: false }
+        ]
+      },
+      {
+        id: 402,
+        order: 11,
+        title: "Perspectiva y Lentes",
+        status: "locked",
+        icon: "image",
+        lessons: [
+          { id: "U11-L1", title: "Ángulos (Picado, Contrapicado, A ras de suelo)", type: "reading", completed: false },
+          { id: "U11-L2", title: "Distancia focal (Angular vs. Teleobjetivo)", type: "practice", completed: false },
+          { id: "U11-L3", title: "Compresión de planos (Hacer que el fondo se vea cerca)", type: "quiz", completed: false }
+        ]
+      }
     ]
   },
   {
     id: 5,
-    title: "SECCIÓN 5: LUZ Y COLOR (Nivel Pro)",
+    title: "SECCIÓN 5: LUZ Y COLOR",
     description: "El toque final para fotos profesionales.",
     themeColor: "green",
     units: [
-      { id: 501, order: 12, title: "Temperatura y Color", status: "locked", icon: "sun", lessons: [] },
-      { id: 502, order: 13, title: "Dirección de la Luz", status: "locked", icon: "camera", lessons: [] }
+      {
+        id: 501,
+        order: 12,
+        title: "Temperatura y Color",
+        status: "locked",
+        icon: "sun",
+        lessons: [
+          { id: "U12-L1", title: "Cálido vs. Frío", type: "reading", completed: false },
+          { id: "U12-L2", title: "Balance de Blancos (WB)", type: "practice", completed: false },
+          { id: "U12-L3", title: "La Hora Dorada y la Hora Azul", type: "quiz", completed: false }
+        ]
+      },
+      {
+        id: 502,
+        order: 13,
+        title: "Dirección de la Luz",
+        status: "locked",
+        icon: "camera",
+        lessons: [
+          { id: "U13-L1", title: "Luz frontal vs. Luz lateral (Volumen)", type: "reading", completed: false },
+          { id: "U13-L2", title: "Contraluz y Siluetas", type: "practice", completed: false },
+          { id: "U13-L3", title: "Luz dura vs. Luz suave (Sombras)", type: "quiz", completed: false }
+        ]
+      }
     ]
   }
 ];
@@ -137,62 +229,6 @@ const IconMap = ({ name, className }) => {
     case 'sun': return <Sun className={className} />;
     default: return <Star className={className} />;
   }
-};
-
-const InlineLessonList = ({ unit, colorTheme }) => {
-  const accentGradient = colorTheme === 'blue'
-    ? 'from-[#5d7dff] via-[#546df6] to-[#5ab8ff]'
-    : 'from-[#4ad3a3] via-[#43c498] to-[#4fdfb2]';
-
-  const activeLessonIndex = unit.lessons.findIndex((lesson) => !lesson.completed);
-  const effectiveActiveIndex = activeLessonIndex === -1 ? unit.lessons.length - 1 : activeLessonIndex;
-
-  return (
-    <div className="w-full max-w-xl mt-4 bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.25)] backdrop-blur-sm">
-      <div className="flex items-center justify-between px-4 py-3 bg-black/20 border-b border-white/10">
-        <span className="text-xs font-bold uppercase tracking-[0.25em] text-white/70">Lecciones</span>
-        <span className="text-white/60 text-xs">{unit.lessons.length} en total</span>
-      </div>
-      <ul className="divide-y divide-white/5">
-        {unit.lessons.map((lesson, idx) => {
-          const isLocked = unit.status === 'locked';
-          const isActive = idx === effectiveActiveIndex && !isLocked;
-          const isDone = lesson.completed;
-
-          let badgeClass = 'bg-white/10 text-white/70 border border-white/10';
-          let badgeContent = idx + 1;
-
-          if (isLocked) {
-            badgeClass = 'bg-black/30 text-white/40 border border-white/5';
-            badgeContent = <Lock size={14} />;
-          } else if (isDone) {
-            badgeClass = 'bg-gradient-to-br from-[#4ad3a3] to-[#5be8c0] text-white shadow-[0_0_12px_rgba(90,232,192,0.35)] border-0';
-            badgeContent = <Check size={14} />;
-          } else if (isActive) {
-            badgeClass = 'bg-gradient-to-br from-[#ffaf45] to-[#ffd76a] text-[#24140f] shadow-[0_0_18px_rgba(255,215,106,0.35)] border-0 font-black';
-            badgeContent = 'GO';
-          }
-
-          return (
-            <li key={lesson.id} className="flex items-center gap-3 px-4 py-3 bg-white/0">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${badgeClass}`}>
-                {badgeContent}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-white text-sm font-semibold leading-tight">{lesson.title}</span>
-                <span className="text-white/50 text-xs mt-1">Lección {idx + 1}</span>
-              </div>
-              {isActive && (
-                <div className={`ml-auto px-3 py-1 text-[11px] font-bold rounded-full bg-gradient-to-r ${accentGradient} text-white uppercase tracking-wide shadow-[0_6px_18px_rgba(0,0,0,0.25)]`}>
-                  Próxima
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
 };
 
 const LessonItem = ({ lesson, index, isCurrent, onStart, isAvailable }) => {
@@ -300,8 +336,8 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
 // ==========================================
 const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => {
   const yellowGlow = "shadow-[0_0_26px_rgba(255,206,74,0.45)]";
-
   const baseGradient = "bg-gradient-to-br from-[#ffb347] via-[#ffc857] to-[#ff9f1c]";
+  
   let bgColor = baseGradient;
   let ringClass = "";
   let IconComponent = () => <Camera className="w-8 h-8 text-[#2b1a00]" strokeWidth={3} />;
@@ -311,12 +347,15 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
     ringClass = "ring-4 ring-yellow-200 ring-offset-4 ring-offset-[#0f102c]";
     scaleEffect = `scale-110 ${yellowGlow}`;
   } else if (unit.status === 'completed') {
-
+    bgColor = "bg-gradient-to-br from-[#ffda6b] via-[#ffc233] to-[#ffb300]";
+    IconComponent = () => <Check className="w-8 h-8 text-[#2b1a00]" strokeWidth={4} />;
+  } else {
+    // Locked
+    bgColor = "bg-white/5";
+    IconComponent = () => <Lock className="w-6 h-6 text-white/40" />;
   }
 
-  // FIX: Ajuste del z-index dinámico. 
-  // Si está seleccionado (isSelected), subimos a z-50 para que el popover flote sobre todo.
-  // Si no, se queda en z-10 normal.
+  // FIX: Ajuste del z-index dinámico
   const zIndexClass = isSelected ? "z-50" : "z-10";
 
   return (
@@ -324,7 +363,10 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
       {isSelected && (
         <>
           <div className="fixed inset-0 z-20 cursor-default" onClick={() => onSelect(null)}></div>
-
+          <UnitDetailCard 
+            unit={unit} 
+            colorTheme={colorTheme} 
+            onClose={() => onSelect(null)} 
             onStartLesson={onStartLesson}
           />
         </>
@@ -348,8 +390,6 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
           Unidad {unit.order}
         </span>
       </div>
-
-      <InlineLessonList unit={unit} colorTheme={colorTheme} />
     </div>
   );
 };
@@ -363,7 +403,7 @@ const SectionHeader = ({ section }) => {
     : 'bg-gradient-to-r from-[#45d0a8] via-[#39c39a] to-[#4ae8c0]';
 
   return (
-
+    <div className={`${bgClass} text-white py-5 px-5 text-center shadow-md mb-12 w-full sticky top-0 z-20 rounded-2xl border border-white/10`}>
       <h2 className="text-xl md:text-2xl font-black uppercase tracking-[0.28em] mb-1 drop-shadow-sm">
         {section.title}
       </h2>
