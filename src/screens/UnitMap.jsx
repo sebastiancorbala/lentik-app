@@ -334,10 +334,11 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
 // ==========================================
 // 4. NODO DE UNIDAD
 // ==========================================
-const UnitNode = ({ unit, isSelected, onSelect, onStartLesson }) => {
+const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => {
   const yellowGlow = "shadow-[0_0_26px_rgba(255,206,74,0.45)]";
 
-  let bgColor = "bg-gradient-to-br from-[#ffe08a] via-[#ffce4a] to-[#ffae00]";
+  const baseGradient = "bg-gradient-to-br from-[#ffb347] via-[#ffc857] to-[#ff9f1c]";
+  let bgColor = baseGradient;
   let ringClass = "";
   let IconComponent = () => <Camera className="w-8 h-8 text-[#2b1a00]" strokeWidth={3} />;
   let scaleEffect = "";
@@ -346,7 +347,7 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson }) => {
     ringClass = "ring-4 ring-yellow-200 ring-offset-4 ring-offset-[#0f102c]";
     scaleEffect = `scale-110 ${yellowGlow}`;
   } else if (unit.status === 'completed') {
-    bgColor = "bg-gradient-to-br from-[#ffda6b] via-[#ffc233] to-[#ffb300]";
+    bgColor = baseGradient;
   }
 
   const statusBadge = {
@@ -362,8 +363,8 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson }) => {
           <div className="fixed inset-0 z-20 cursor-default" onClick={() => onSelect(null)}></div>
           <UnitDetailCard
             unit={unit}
-            colorTheme={colorTheme} 
-            onClose={() => onSelect(null)} 
+            colorTheme={colorTheme}
+            onClose={() => onSelect(null)}
             onStartLesson={onStartLesson}
           />
         </>
@@ -400,7 +401,7 @@ const SectionHeader = ({ section }) => {
     : 'bg-gradient-to-r from-[#45d0a8] via-[#39c39a] to-[#4ae8c0]';
 
   return (
-    <div className={`${bgClass} text-white py-5 px-5 text-center shadow-md mb-8 w-full sticky top-[56px] z-20 rounded-2xl border border-white/10`}>
+    <div className={`${bgClass} text-white py-5 px-5 text-center shadow-md mb-12 w-full sticky top-[56px] z-20 rounded-2xl border border-white/10`}>
       <h2 className="text-xl md:text-2xl font-black uppercase tracking-[0.28em] mb-1 drop-shadow-sm">
         {section.title}
       </h2>
@@ -444,6 +445,7 @@ export default function UnitMap({ onStartLesson }) {
                 isSelected={selectedUnitId === unit.id}
                 onSelect={() => handleUnitSelect(unit.id)}
                 onStartLesson={onStartLesson}
+                colorTheme={section.themeColor}
               />
             ))}
           </div>
