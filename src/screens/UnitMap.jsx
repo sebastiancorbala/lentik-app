@@ -334,37 +334,19 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
 // ==========================================
 // 4. NODO DE UNIDAD
 // ==========================================
-const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => {
-  const themeColors = {
-    green: {
-      bg: "bg-gradient-to-br from-[#45d0a8] to-[#58e2ba]",
-      ring: "ring-[#76ffd9]",
-      active: "bg-gradient-to-br from-[#6af0c4] via-[#55e3b3] to-[#3cbf93]"
-    },
-    blue: {
-      bg: "bg-gradient-to-br from-[#6b8bff] via-[#617df8] to-[#5fc7ff]",
-      ring: "ring-[#8ce2ff]",
-      active: "bg-gradient-to-br from-[#7da3ff] via-[#6e92ff] to-[#66d5ff]"
-    }
-  };
-  
-  const currentTheme = themeColors[colorTheme] || themeColors.green;
-  
-  let bgColor = "bg-white/5";
+const UnitNode = ({ unit, isSelected, onSelect, onStartLesson }) => {
+  const yellowGlow = "shadow-[0_0_26px_rgba(255,206,74,0.45)]";
+
+  let bgColor = "bg-gradient-to-br from-[#ffe08a] via-[#ffce4a] to-[#ffae00]";
   let ringClass = "";
-  let IconComponent = Lock;
+  let IconComponent = () => <Camera className="w-8 h-8 text-[#2b1a00]" strokeWidth={3} />;
   let scaleEffect = "";
 
-  if (unit.status === 'completed') {
-    bgColor = currentTheme.bg;
-    IconComponent = Check;
-  } else if (unit.status === 'current') {
-    bgColor = currentTheme.active;
-    ringClass = `ring-4 ${currentTheme.ring} ring-offset-4 ring-offset-[#0f102c]`;
-    IconComponent = () => <IconMap name={unit.icon} className="w-8 h-8 text-white" />;
-    scaleEffect = "scale-110 shadow-[0_0_30px_rgba(122,214,255,0.4)]";
-  } else {
-    IconComponent = () => <IconMap name={unit.icon} className="w-6 h-6 text-white/60" />;
+  if (unit.status === 'current') {
+    ringClass = "ring-4 ring-yellow-200 ring-offset-4 ring-offset-[#0f102c]";
+    scaleEffect = `scale-110 ${yellowGlow}`;
+  } else if (unit.status === 'completed') {
+    bgColor = "bg-gradient-to-br from-[#ffda6b] via-[#ffc233] to-[#ffb300]";
   }
 
   const statusBadge = {
@@ -398,11 +380,7 @@ const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => 
             active:translate-y-1 active:shadow-none z-30
           `}
         >
-            {unit.status === 'completed' ? (
-             <Check size={32} strokeWidth={4} className="text-white" />
-          ) : (
-             <IconComponent />
-          )}
+            <IconComponent />
         </button>
 
         <span className="px-3 py-1 rounded-full bg-orange-500 text-white font-semibold uppercase tracking-wide shadow-lg mt-2">
@@ -422,7 +400,7 @@ const SectionHeader = ({ section }) => {
     : 'bg-gradient-to-r from-[#45d0a8] via-[#39c39a] to-[#4ae8c0]';
 
   return (
-    <div className={`${bgClass} text-white py-6 px-6 text-center shadow-md mb-12 w-full sticky top-[72px] z-20 rounded-2xl border border-white/10`}>
+    <div className={`${bgClass} text-white py-5 px-5 text-center shadow-md mb-8 w-full sticky top-[56px] z-20 rounded-2xl border border-white/10`}>
       <h2 className="text-xl md:text-2xl font-black uppercase tracking-[0.28em] mb-1 drop-shadow-sm">
         {section.title}
       </h2>
@@ -444,7 +422,7 @@ export default function UnitMap({ onStartLesson }) {
   };
 
   return (
-    <div className="flex flex-col items-center px-4 py-4 w-full">
+    <div className="flex flex-col items-center px-4 pt-1 pb-4 w-full">
       {courseData.map((section) => (
         <div key={section.id} className="flex flex-col items-center w-full">
 
@@ -463,7 +441,6 @@ export default function UnitMap({ onStartLesson }) {
               <UnitNode
                 key={unit.id}
                 unit={unit}
-                colorTheme={section.themeColor}
                 isSelected={selectedUnitId === unit.id}
                 onSelect={() => handleUnitSelect(unit.id)}
                 onStartLesson={onStartLesson}
