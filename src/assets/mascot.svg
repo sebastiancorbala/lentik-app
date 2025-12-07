@@ -1,0 +1,54 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mascotTitle mascotDesc">
+  <title id="mascotTitle">Gato fotógrafo saludando</title>
+  <desc id="mascotDesc">Ilustración de un gato negro con boina marrón y una cámara en el pecho levantando la pata.</desc>
+  <defs>
+    <linearGradient id="fur" x1="200" y1="140" x2="640" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1F2430" />
+      <stop offset="1" stop-color="#2F3644" />
+    </linearGradient>
+    <linearGradient id="shadow" x1="400" y1="620" x2="400" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#CBD5E1" stop-opacity="0.7" />
+      <stop offset="1" stop-color="#94A3B8" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+  <ellipse cx="400" cy="650" rx="210" ry="90" fill="url(#shadow)" />
+  <path d="M270 180C270 150 305 130 335 140L360 148C374 152 387 160 398 171C401 174 405 174 408 171C419 160 432 152 446 148L471 140C501 130 536 150 536 180V262H270V180Z" fill="url(#fur)" />
+  <path d="M240 286C240 232 284 188 338 188H462C516 188 560 232 560 286V420C560 534 476 626 362 632C287 636 240 560 240 472V286Z" fill="url(#fur)" />
+  <path d="M320 178C320 162 332 148 348 146C384 141 416 141 452 146C468 148 480 162 480 178V198H320V178Z" fill="#7B4A2B" />
+  <ellipse cx="400" cy="200" rx="165" ry="110" fill="#1E293B" />
+  <path d="M235 225C235 160 294 110 368 110H432C506 110 565 160 565 225V260H235V225Z" fill="#151B26" />
+  <path d="M236 270C236 216 284 172 344 172H456C516 172 564 216 564 270V360C564 430 506 486 436 480L374 474C291 466 236 398 236 316V270Z" fill="#F8FAFC" />
+  <path d="M272 330C272 310 288 294 308 294H344C366 294 384 312 384 334V348C384 360 374 370 362 370H296C282 370 272 358 272 344V330Z" fill="#1E293B" />
+  <path d="M416 334C416 312 434 294 456 294H492C512 294 528 310 528 330V344C528 358 518 370 504 370H438C426 370 416 360 416 348V334Z" fill="#1E293B" />
+  <circle cx="312" cy="334" r="18" fill="white" />
+  <circle cx="488" cy="334" r="18" fill="white" />
+  <circle cx="316" cy="330" r="10" fill="#0F172A" />
+  <circle cx="484" cy="330" r="10" fill="#0F172A" />
+  <circle cx="318" cy="328" r="4" fill="white" />
+  <circle cx="486" cy="328" r="4" fill="white" />
+  <path d="M360 408C360 389 376 374 395 376L404 377C413 378 420 386 420 395V402C420 420 405 435 387 434L372 433C364 432 360 424 360 416V408Z" fill="#F43F5E" />
+  <path d="M380 360H420C426 360 432 363 435 368L452 394C456 400 452 408 444 408H356C348 408 344 400 348 394L365 368C368 363 374 360 380 360Z" fill="#0F172A" />
+  <rect x="326" y="442" width="148" height="126" rx="20" fill="#E2E8F0" />
+  <rect x="338" y="456" width="124" height="98" rx="16" fill="#0F172A" />
+  <circle cx="400" cy="505" r="34" fill="#CBD5E1" />
+  <circle cx="400" cy="505" r="22" fill="#0F172A" />
+  <circle cx="400" cy="505" r="8" fill="#94A3B8" />
+  <rect x="374" y="456" width="52" height="12" rx="6" fill="#F59E0B" />
+  <rect x="440" y="478" width="18" height="8" rx="4" fill="#10B981" />
+  <path d="M238 232C238 204 263 182 291 186L315 190C332 193 344 208 344 226C344 246 327 262 307 258L272 252C252 248 238 231 238 212V232Z" fill="#E2E8F0" />
+  <path d="M562 232C562 204 537 182 509 186L485 190C468 193 456 208 456 226C456 246 473 262 493 258L528 252C548 248 562 231 562 212V232Z" fill="#E2E8F0" />
+  <path d="M520 550L540 586C552 606 532 632 510 622L470 602V516L508 520C518 522 526 529 529 538L540 566L520 550Z" fill="#F8FAFC" />
+  <path d="M280 550L260 586C248 606 268 632 290 622L330 602V516L292 520C282 522 274 529 271 538L260 566L280 550Z" fill="#F8FAFC" />
+  <path d="M552 346C552 402 506 448 450 448H350C294 448 248 402 248 346V324H552V346Z" fill="#F8FAFC" />
+  <path d="M270 612C270 582 292 558 322 556L360 554V640L300 628C282 624 270 609 270 590V612Z" fill="#1E293B" />
+  <path d="M530 612C530 582 508 558 478 556L440 554V640L500 628C518 624 530 609 530 590V612Z" fill="#1E293B" />
+  <path d="M260 240C260 172 308 116 374 108L410 104C474 97 532 145 538 210L540 228H260V240Z" fill="#0B1220" />
+  <path d="M248 280C248 262 262 248 280 248H520C538 248 552 262 552 280V312C552 330 538 344 520 344H280C262 344 248 330 248 312V280Z" fill="#F8FAFC" />
+  <rect x="380" y="302" width="40" height="10" rx="5" fill="#0B1220" />
+  <path d="M302 244L280 224C268 213 272 194 288 190L322 182C350 175 378 188 392 213C399 226 410 236 424 242L432 246H302Z" fill="#0B1220" />
+  <path d="M498 244L520 224C532 213 528 194 512 190L478 182C450 175 422 188 408 213C401 226 390 236 376 242L368 246H498Z" fill="#0B1220" />
+  <circle cx="560" cy="408" r="12" fill="#F59E0B" />
+  <circle cx="240" cy="408" r="12" fill="#F59E0B" />
+  <path d="M248 434C248 417 262 404 279 406L315 410C333 412 346 428 344 445C341 464 322 476 304 470L270 458C257 454 248 441 248 428V434Z" fill="#F8FAFC" />
+  <path d="M552 434C552 417 538 404 521 406L485 410C467 412 454 428 456 445C459 464 478 476 496 470L530 458C543 454 552 441 552 428V434Z" fill="#F8FAFC" />
+</svg>
