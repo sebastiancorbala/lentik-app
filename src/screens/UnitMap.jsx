@@ -398,29 +398,16 @@ const UnitNode = ({ unit, colorTheme, isSelected, onSelect, onStartLesson }) => 
             active:translate-y-1 active:shadow-none z-30
           `}
         >
-          {unit.status === 'completed' ? (
+            {unit.status === 'completed' ? (
              <Check size={32} strokeWidth={4} className="text-white" />
           ) : (
              <IconComponent />
           )}
         </button>
 
-        <div className="relative z-10 w-full">
-          <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur">
-            <p className="text-sm font-semibold text-white leading-tight text-center">
-              {unit.title}
-            </p>
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] text-white/60">
-              <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 font-semibold uppercase tracking-wide">Unidad {unit.order}</span>
-              <span className={`px-2 py-1 rounded-full font-semibold uppercase tracking-wide ${statusBadge.className}`}>
-                {statusBadge.label}
-              </span>
-              <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 font-semibold uppercase tracking-wide">
-                {unit.lessons.length} lecciones
-              </span>
-            </div>
-          </div>
-        </div>
+        <span className="px-3 py-1 rounded-full bg-orange-500 text-white font-semibold uppercase tracking-wide shadow-lg">
+          Unidad {unit.order}
+        </span>
       </div>
     </div>
   );
