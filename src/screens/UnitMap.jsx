@@ -319,20 +319,7 @@ export default function UnitMap({ onStartLesson, onExit }) {
     <div className="relative min-h-screen bg-gradient-to-b from-[#0d0f2f] via-[#0b0d29] to-[#090820] text-white pb-28">
 
       {/* Barra Superior del Mapa */}
-      <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0f102c]/90 backdrop-blur-xl px-5 py-4 flex items-center justify-between h-[72px] shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => onExit?.()}
-            className="rounded-full bg-white/5 p-2 text-white/80 hover:text-white hover:bg-white/10 transition"
-            aria-label="Volver al inicio"
-          >
-            <X size={20} />
-          </button>
-          <div className="flex flex-col leading-tight">
-            <span className="text-xs uppercase tracking-[0.32em] text-white/60">Lentik</span>
-            <span className="text-lg font-extrabold text-white">Ruta Fotógrafa</span>
-          </div>
+
         </div>
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex flex-col text-right leading-tight">

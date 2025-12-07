@@ -9,8 +9,7 @@ function App() {
   const handleStart = () => setCurrentScreen('map');
 
   return (
-    <div className="bg-gradient-to-b from-[#07041c] via-[#0b0830] to-[#0a0a25] min-h-screen flex justify-center font-sans text-white">
-      <div className="w-full max-w-md bg-[#0e0a2d] shadow-2xl min-h-screen relative overflow-hidden ring-1 ring-white/5">
+
         {currentScreen === 'intro' && (
           <IntroScreen onStart={handleStart} />
         )}
