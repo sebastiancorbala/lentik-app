@@ -247,7 +247,8 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
 const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => {
   const yellowGlow = "shadow-[0_0_26px_rgba(255,206,74,0.45)]";
 
-  let bgColor = "bg-gradient-to-br from-[#ffe08a] via-[#ffce4a] to-[#ffae00]";
+  const baseGradient = "bg-gradient-to-br from-[#ffb347] via-[#ffc857] to-[#ff9f1c]";
+  let bgColor = baseGradient;
   let ringClass = "";
   let IconComponent = () => <Camera className="w-8 h-8 text-[#2b1a00]" strokeWidth={3} />;
   let scaleEffect = "";
@@ -256,12 +257,16 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
     ringClass = "ring-4 ring-yellow-200 ring-offset-4 ring-offset-[#0f102c]";
     scaleEffect = `scale-110 ${yellowGlow}`;
   } else if (unit.status === 'completed') {
+
     bgColor = "bg-gradient-to-br from-[#ffda6b] via-[#ffc233] to-[#ffb300]";
     IconComponent = () => <Check className="w-8 h-8 text-[#2b1a00]" strokeWidth={4} />;
   } else {
     // Locked
     bgColor = "bg-white/5";
     IconComponent = () => <Lock className="w-6 h-6 text-white/40" />;
+
+    bgColor = baseGradient;
+
   }
 
   // FIX: Ajuste del z-index dinámico. 
