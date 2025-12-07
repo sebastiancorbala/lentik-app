@@ -10,8 +10,7 @@ import {
   User, 
   Sparkles,
   ChevronRight,
-  Settings,
-  Heart
+  Settings
 } from 'lucide-react';
 
 // ==========================================
@@ -36,14 +35,6 @@ const ProfileView = () => (
     <p className="text-purple-400 font-medium mb-8">Fotógrafo Aprendiz</p>
 
     <div className="w-full space-y-3">
-      <div className="bg-[#24243e] p-4 rounded-xl flex items-center justify-between border border-white/5 hover:bg-[#2d2859] transition-colors cursor-pointer">
-        <span className="flex items-center gap-3"><Sparkles size={18} className="text-yellow-400"/> Racha</span>
-        <span className="font-bold text-yellow-100">12 Días 🔥</span>
-      </div>
-      <div className="bg-[#24243e] p-4 rounded-xl flex items-center justify-between border border-white/5 hover:bg-[#2d2859] transition-colors cursor-pointer">
-        <span className="flex items-center gap-3"><Heart size={18} className="text-red-400"/> Vidas</span>
-        <span className="font-bold text-red-100">5/5 ❤️</span>
-      </div>
       <div className="bg-[#24243e] p-4 rounded-xl flex items-center justify-between border border-white/5 hover:bg-[#2d2859] transition-colors cursor-pointer">
         <span className="flex items-center gap-3"><Settings size={18} className="text-gray-400"/> Configuración</span>
         <ChevronRight size={18} className="text-gray-500" />
