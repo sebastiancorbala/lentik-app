@@ -24,11 +24,7 @@ export const courseSections = [
         title: "Encuadre Básico",
         status: "current",
         icon: "image",
-        lessons: [
-          { id: "U2-L1", title: "Horizontal vs. Vertical (Cuándo usar cuál)", type: "reading", completed: false },
-          { id: "U2-L2", title: "Llenar el encuadre (Acercarse más)", type: "practice", completed: false },
-          { id: "U2-L3", title: "El horizonte recto (Evitar fotos chuecas)", type: "quiz", completed: false }
-        ]
+
       },
       {
         id: 103,
