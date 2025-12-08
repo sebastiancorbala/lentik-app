@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-
-import { lessonData } from '../data/unit1-lesson1';
+import { AlertCircle, ArrowRight, Check, X } from 'lucide-react';
+import { lessonOneData as lessonData } from '../data/course/lessons/unit1/lesson1';
 
 export default function LessonScreen({ onExit }) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -13,52 +13,66 @@ export default function LessonScreen({ onExit }) {
   const progress = useMemo(() => ((currentStep + 1) / totalSteps) * 100, [currentStep, totalSteps]);
 
   const progressNodes = useMemo(
-    () => [
-
-      { id: 'test', label: 'Test', type: 'test' },
-    ],
+    () => lessonData.map((step, index) => ({ id: step.id, label: step.title ?? step.question, type: step.type, index })),
     []
   );
 
   const resetFeedback = () => {
     setStatus('idle');
     setFeedback('');
-
+    setSelectedOption(null);
   };
 
   const handleNext = () => {
     resetFeedback();
     if (currentStep < totalSteps - 1) {
       setCurrentStep((prev) => prev + 1);
+    } else if (onExit) {
+      onExit();
     }
   };
 
-
+  const handleOptionSelect = (option) => {
     if (status !== 'idle') return;
 
     setSelectedOption(option?.id ?? null);
     const isCorrect = option?.correct;
+    const optionFeedback = option?.feedback;
+
     if (isCorrect) {
       setStatus('correct');
-
+      setFeedback(optionFeedback || currentData.feedbackCorrect || '¡Correcto!');
+    } else {
+      setStatus('wrong');
+      setFeedback(optionFeedback || currentData.feedbackWrong || 'Intenta de nuevo.');
     }
   };
 
   const renderProgressDots = () => (
-
-
+    <div className="flex flex-wrap gap-2 mb-6 justify-center">
+      {progressNodes.map((node) => {
+        const isActive = node.index === currentStep;
+        const isDone = node.index < currentStep;
         const baseColor = node.type === 'test' ? 'border-amber-500 text-amber-300' : 'border-blue-500 text-blue-300';
         const fillColor = node.type === 'test' ? 'bg-amber-500/20' : 'bg-blue-500/20';
+
+        const displaySymbol = () => {
+          if (node.type === 'test') return 'T';
+          if (isDone || node.type === 'summary') return <Check size={16} />;
+          return null;
+        };
 
         return (
           <div key={node.id} className="flex flex-col items-center min-w-[56px]">
             <div
-
+              className={`w-12 h-12 rounded-full border flex items-center justify-center font-bold text-sm ${baseColor} ${
+                isActive ? fillColor : ''
+              } ${isDone ? 'bg-white/10 border-white/20 text-white' : ''}`}
             >
-              {node.type === 'test' ? 'T' : node.id}
+              {displaySymbol()}
             </div>
             <p className="text-[11px] text-gray-400 text-center mt-1 leading-tight line-clamp-2">
-              {node.type === 'test' ? 'Test' : node.label}
+              {node.type === 'summary' ? 'Resumen' : node.label}
             </p>
           </div>
         );
@@ -66,7 +80,7 @@ export default function LessonScreen({ onExit }) {
     </div>
   );
 
-  const renderTheory = (withTip = false) => (
+  const renderTheory = () => (
     <div className="flex flex-col h-full animate-in fade-in duration-500">
       {currentData.image && (
         <div className="h-64 rounded-2xl overflow-hidden mb-6 border border-gray-800">
@@ -74,26 +88,56 @@ export default function LessonScreen({ onExit }) {
         </div>
       )}
       <h2 className="text-2xl font-bold text-white mb-4">{currentData.title}</h2>
-
+      <p className="text-gray-300 whitespace-pre-line leading-relaxed">{currentData.content}</p>
       <button
         onClick={handleNext}
         className="mt-auto w-full bg-blue-600 py-4 rounded-xl font-bold text-white uppercase hover:bg-blue-500"
       >
-
+        {currentData.buttonText || 'Continuar'}
       </button>
     </div>
   );
 
-  const renderQuiz = (isImageQuiz = false) => (
+  const renderQuiz = (useImages = false) => (
     <div className="flex flex-col h-full">
-
+      {currentData.title && (
+        <h2 className="text-2xl font-bold text-white mb-4">{currentData.title}</h2>
+      )}
+      {currentData.question && <p className="text-gray-300 mb-4">{currentData.question}</p>}
+      <div className={useImages ? 'grid grid-cols-2 gap-4' : 'flex flex-col gap-3'}>
+        {currentData.options?.map((option) => (
+          <button
+            key={option.id}
+            onClick={() => handleOptionSelect(option)}
+            className={`rounded-xl border border-gray-800 bg-white/5 text-left p-4 hover:bg-white/10 transition flex flex-col gap-3 ${
+              selectedOption === option.id ? 'ring-2 ring-blue-400' : ''
+            }`}
+          >
+            {useImages && option.src && (
+              <img src={option.src} alt="Opción" className="w-full h-32 object-cover rounded-lg" />
+            )}
+            <span className="text-white font-semibold">{option.text || option.label}</span>
+          </button>
+        ))}
       </div>
     </div>
   );
 
   const renderCompare = () => (
     <div className="flex flex-col h-full">
-
+      <h2 className="text-2xl font-bold text-white mb-3">{currentData.instruction}</h2>
+      <div className="grid grid-cols-2 gap-4">
+        {currentData.options?.map((option) => (
+          <button
+            key={option.id}
+            onClick={() => handleOptionSelect(option)}
+            className={`rounded-xl overflow-hidden border border-gray-800 hover:border-blue-500 transition ${
+              selectedOption === option.id ? 'ring-2 ring-blue-400' : ''
+            }`}
+          >
+            <img src={option.src} alt="Comparación" className="w-full h-40 object-cover" />
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -115,7 +159,7 @@ export default function LessonScreen({ onExit }) {
         onClick={onExit}
         className="w-full bg-white text-black py-4 rounded-xl font-bold uppercase hover:bg-gray-200"
       >
-
+        Volver al mapa
       </button>
     </div>
   );
@@ -124,9 +168,8 @@ export default function LessonScreen({ onExit }) {
     switch (currentData.type) {
       case 'theory':
         return renderTheory();
-
       case 'quiz':
-        return renderQuiz();
+        return renderQuiz(false);
       case 'compare':
         return renderCompare();
       case 'image_quiz':
@@ -155,8 +198,9 @@ export default function LessonScreen({ onExit }) {
 
       {status !== 'idle' && (
         <div
-          className={`fixed bottom-0 left-0 right-0 p-6 rounded-t-3xl border-t border-white/10 shadow-2xl animate-in slide-in-from-bottom-10 z-50
-            ${status === 'correct' ? 'bg-emerald-900' : 'bg-rose-900'}`}
+          className={`fixed bottom-0 left-0 right-0 p-6 rounded-t-3xl border-t border-white/10 shadow-2xl animate-in slide-in-from-bottom-10 z-50 ${
+            status === 'correct' ? 'bg-emerald-900' : 'bg-rose-900'
+          }`}
         >
           <div className="max-w-md mx-auto">
             <p className="font-bold text-xl text-white mb-2">{status === 'correct' ? '¡Correcto!' : 'Ups...'}</p>
@@ -173,8 +217,9 @@ export default function LessonScreen({ onExit }) {
               )}
               <button
                 onClick={handleNext}
-                className={`flex-1 py-3 rounded-xl font-bold uppercase text-white flex items-center justify-center gap-2
-                  ${status === 'correct' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-rose-600 hover:bg-rose-500'}`}
+                className={`flex-1 py-3 rounded-xl font-bold uppercase text-white flex items-center justify-center gap-2 ${
+                  status === 'correct' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-rose-600 hover:bg-rose-500'
+                }`}
                 disabled={currentData.type === 'summary'}
               >
                 <ArrowRight size={18} />
