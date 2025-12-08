@@ -24,7 +24,7 @@ export const courseSections = [
         title: "Encuadre Básico",
         status: "current",
         icon: "image",
-        lessons: []
+
       },
       {
         id: 103,

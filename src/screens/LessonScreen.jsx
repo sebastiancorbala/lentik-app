@@ -69,7 +69,7 @@ export default function LessonScreen({ onExit }) {
                 isActive ? fillColor : ''
               } ${isDone ? 'bg-white/10 border-white/20 text-white' : ''}`}
             >
-              {displaySymbol()}
+
             </div>
             <p className="text-[11px] text-gray-400 text-center mt-1 leading-tight line-clamp-2">
               {node.type === 'summary' ? 'Resumen' : node.label}
