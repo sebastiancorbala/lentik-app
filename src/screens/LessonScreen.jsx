@@ -56,6 +56,12 @@ export default function LessonScreen({ onExit }) {
         const baseColor = node.type === 'test' ? 'border-amber-500 text-amber-300' : 'border-blue-500 text-blue-300';
         const fillColor = node.type === 'test' ? 'bg-amber-500/20' : 'bg-blue-500/20';
 
+        const displaySymbol = () => {
+          if (node.type === 'test') return 'T';
+          if (isDone || node.type === 'summary') return <Check size={16} />;
+          return null;
+        };
+
         return (
           <div key={node.id} className="flex flex-col items-center min-w-[56px]">
             <div
@@ -63,7 +69,7 @@ export default function LessonScreen({ onExit }) {
                 isActive ? fillColor : ''
               } ${isDone ? 'bg-white/10 border-white/20 text-white' : ''}`}
             >
-              {node.type === 'test' ? 'T' : node.index + 1}
+
             </div>
             <p className="text-[11px] text-gray-400 text-center mt-1 leading-tight line-clamp-2">
               {node.type === 'summary' ? 'Resumen' : node.label}
