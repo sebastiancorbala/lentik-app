@@ -22,7 +22,7 @@ import {
 const courseData = [
   {
     id: 1,
-    title: "SECCIÓN 1: EL OJO DEL FOTÓGRAFO",
+    title: "El ojo del fotógrafo",
     description: "Mejora tus fotos aprendiendo a mirar sin tocar botones complicados.",
     themeColor: "green",
     units: [
@@ -66,7 +66,7 @@ const courseData = [
   },
   {
     id: 2,
-    title: "SECCIÓN 2: DOMINANDO LA LUZ",
+    title: "Dominando la luz",
     description: "Entramos a lo técnico: introducimos las variables una por una.",
     themeColor: "blue",
     units: [
@@ -109,7 +109,7 @@ const courseData = [
   },
   {
     id: 3,
-    title: "SECCIÓN 3: CALIDAD Y CONTROL",
+    title: "Calidad y control",
     description: "Conceptos más abstractos para completar el modo manual.",
     themeColor: "green",
     units: [
@@ -151,7 +151,7 @@ const courseData = [
   },
   {
     id: 4,
-    title: "SECCIÓN 4: COMPOSICIÓN AVANZADA",
+    title: "Composición avanzada",
     description: "Volvemos a la creatividad con herramientas más sofisticadas.",
     themeColor: "blue",
     units: [
@@ -183,7 +183,7 @@ const courseData = [
   },
   {
     id: 5,
-    title: "SECCIÓN 5: LUZ Y COLOR",
+    title: "Luz y color",
     description: "El toque final para fotos profesionales.",
     themeColor: "green",
     units: [
@@ -351,8 +351,8 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
     IconComponent = () => <Check className="w-8 h-8 text-[#2b1a00]" strokeWidth={4} />;
   } else {
     // Locked
-    bgColor = "bg-white/5";
-    IconComponent = () => <Lock className="w-6 h-6 text-white/40" />;
+    bgColor = `${baseGradient} opacity-90`;
+    IconComponent = () => <Camera className="w-7 h-7 text-[#2b1a00]" strokeWidth={3} />;
   }
 
   // FIX: Ajuste del z-index dinámico
@@ -404,12 +404,12 @@ const SectionHeader = ({ section }) => {
 
   return (
     <div className={`${bgClass} text-white py-5 px-5 text-center shadow-md mb-12 w-full sticky top-0 z-20 rounded-2xl border border-white/10`}>
-      <h2 className="text-xl md:text-2xl font-black uppercase tracking-[0.28em] mb-1 drop-shadow-sm">
+      <p className="text-xs font-extrabold uppercase tracking-[0.4em] text-white/80 mb-1">
+        Sección {section.id}
+      </p>
+      <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide drop-shadow-sm">
         {section.title}
       </h2>
-      <p className="text-white/80 font-medium text-sm max-w-xs mx-auto">
-        {section.description}
-      </p>
     </div>
   );
 };
