@@ -83,9 +83,11 @@ const LessonItem = ({ lesson, index, isCurrent, onStart, isAvailable }) => {
 // 3. TARJETA FLOTANTE (POPOVER)
 // ==========================================
 const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
-  const currentLessonIndex = unit.lessons.findIndex(l => !l.completed);
-  const effectiveCurrentIndex = currentLessonIndex === -1 && unit.lessons.length > 0 && unit.status !== 'completed' 
-    ? 0 
+  const lessons = unit?.lessons ?? [];
+
+  const currentLessonIndex = lessons.findIndex(l => !l.completed);
+  const effectiveCurrentIndex = currentLessonIndex === -1 && lessons.length > 0 && unit.status !== 'completed'
+    ? 0
     : currentLessonIndex;
 
   const isAvailable = unit.status === 'current' || unit.status === 'completed';
@@ -109,17 +111,17 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
          </button>
         <h3 className="text-white font-bold text-lg leading-tight drop-shadow-sm">{unit.title}</h3>
         <p className="text-white/90 text-[10px] font-bold mt-1 uppercase tracking-widest bg-black/15 inline-block px-2 py-0.5 rounded-full">
-          {unit.lessons.length} Lecciones
+          {lessons.length} Lecciones
         </p>
       </div>
 
       {/* Lista */}
       <div className="p-3 max-h-64 overflow-y-auto custom-scrollbar">
-        {unit.lessons.length > 0 ? (
-          unit.lessons.map((lesson, idx) => (
+        {lessons.length > 0 ? (
+          lessons.map((lesson, idx) => (
             <LessonItem
-              key={lesson.id} 
-              lesson={lesson} 
+              key={lesson.id}
+              lesson={lesson}
               index={idx}
               isCurrent={idx === effectiveCurrentIndex}
               isAvailable={isAvailable} 
@@ -141,24 +143,17 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
 // 4. NODO DE UNIDAD
 // ==========================================
 const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => {
-  const yellowGlow = "shadow-[0_0_26px_rgba(255,206,74,0.45)]";
   const baseGradient = "bg-gradient-to-br from-[#ffb347] via-[#ffc857] to-[#ff9f1c]";
-  
+
   let bgColor = baseGradient;
   let ringClass = "";
   let IconComponent = () => <Camera className="w-8 h-8 text-[#2b1a00]" strokeWidth={3} />;
-  let scaleEffect = "";
 
-  if (unit.status === 'current') {
-    ringClass = "ring-4 ring-yellow-200 ring-offset-4 ring-offset-[#0f102c]";
-    scaleEffect = `scale-110 ${yellowGlow}`;
-  } else if (unit.status === 'completed') {
+  if (unit.status === 'completed') {
     bgColor = "bg-gradient-to-br from-[#ffda6b] via-[#ffc233] to-[#ffb300]";
     IconComponent = () => <Check className="w-8 h-8 text-[#2b1a00]" strokeWidth={4} />;
   } else {
-    // Locked
     bgColor = `${baseGradient} opacity-90`;
-    IconComponent = () => <Camera className="w-7 h-7 text-[#2b1a00]" strokeWidth={3} />;
   }
 
   // FIX: Ajuste del z-index dinámico
@@ -184,7 +179,7 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
           className={`
             w-20 h-20 rounded-full flex items-center justify-center
             transition-all duration-300 ease-spring cursor-pointer
-            ${bgColor} ${ringClass} ${scaleEffect}
+            ${bgColor} ${ringClass}
             shadow-[0_15px_35px_rgba(0,0,0,0.3)] hover:shadow-[0_18px_40px_rgba(0,0,0,0.35)]
             active:translate-y-1 active:shadow-none z-30
           `}
