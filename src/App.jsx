@@ -80,6 +80,7 @@ const BottomNavBar = ({ activeTab, onTabChange }) => {
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('welcome'); // 'welcome', 'app', 'lesson'
   const [currentTab, setCurrentTab] = useState('map'); // 'map', 'library', 'profile'
+  const [currentLesson, setCurrentLesson] = useState(null);
 
   return (
     <div className="bg-black min-h-screen flex justify-center font-sans">
@@ -108,7 +109,17 @@ export default function App() {
             {/* Contenido Principal */}
             <main className="flex-grow overflow-y-auto custom-scrollbar pb-24">
               {currentTab === 'map' && (
-                <UnitMap onStartLesson={() => setCurrentScreen('lesson')} />
+                <UnitMap
+                  onStartLesson={(unit, lesson) => {
+                    setCurrentLesson({
+                      unitId: unit.id,
+                      unitTitle: unit.title,
+                      lessonId: lesson?.id,
+                      lessonTitle: lesson?.title
+                    });
+                    setCurrentScreen('lesson');
+                  }}
+                />
               )}
               {currentTab === 'library' && <LibraryView />}
               {currentTab === 'profile' && <ProfileView />}
@@ -122,7 +133,13 @@ export default function App() {
         {/* 3. PANTALLA DE LECCIÓN (Sobrepone todo) */}
         {currentScreen === 'lesson' && (
           <div className="absolute inset-0 z-50 bg-[#0f0c29]">
-             <LessonScreen onExit={() => setCurrentScreen('app')} />
+             <LessonScreen
+               lessonMeta={currentLesson}
+               onExit={() => {
+                 setCurrentScreen('app');
+                 setCurrentLesson(null);
+               }}
+             />
           </div>
         )}
 

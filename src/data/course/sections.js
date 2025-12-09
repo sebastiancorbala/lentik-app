@@ -15,15 +15,20 @@ export const courseSections = [
         lessons: [
           { id: "U1-L1", title: "¿Qué es el sujeto principal? (Identificar al protagonista)", type: "quiz", completed: true },
           { id: "U1-L2", title: "El Enfoque (Nítido vs. Borroso)", type: "reading", completed: true },
-          { id: "U1-L3", title: "Bloqueo de enfoque (La técnica de enfocar y reencuadrar)", type: "practice", completed: true }
+          { id: "U1-L3", title: "El fondo", type: "practice", completed: true }
         ]
       },
       {
         id: 102,
         order: 2,
         title: "Encuadre Básico",
-        status: "current",
+        status: "locked",
         icon: "image",
+        lessons: [
+          { id: "U2-L1", title: "Horizontal vs. Vertical (Cuándo usar cuál)", type: "reading", completed: false },
+          { id: "U2-L2", title: "Llenar el encuadre (Acercarse más)", type: "practice", completed: false },
+          { id: "U2-L3", title: "Ley del horizonte", type: "quiz", completed: false }
+        ]
 
       },
       {
