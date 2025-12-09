@@ -66,9 +66,9 @@ const LessonItem = ({ lesson, index, isCurrent, onStart, isAvailable }) => {
       </div>
       {isCurrent && (
         <button
-          onClick={(e) => {
+            onClick={(e) => {
             e.stopPropagation();
-            onStart(); 
+            onStart(lesson);
           }}
           className="px-4 py-1.5 bg-gradient-to-r from-[#ffaf45] to-[#ffd76a] text-[#24140f] text-xs font-black rounded-full shadow-[0_10px_24px_rgba(255,215,106,0.35)] hover:brightness-105 transform transition active:scale-95 flex items-center gap-1"
         >
@@ -164,11 +164,11 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
       {isSelected && (
         <>
           <div className="fixed inset-0 z-20 cursor-default" onClick={() => onSelect(null)}></div>
-          <UnitDetailCard 
-            unit={unit} 
-            colorTheme={colorTheme} 
-            onClose={() => onSelect(null)} 
-            onStartLesson={onStartLesson}
+          <UnitDetailCard
+            unit={unit}
+            colorTheme={colorTheme}
+            onClose={() => onSelect(null)}
+            onStartLesson={(lesson) => onStartLesson?.(unit, lesson)}
           />
         </>
       )}

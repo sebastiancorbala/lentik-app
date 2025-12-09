@@ -1,20 +1,48 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AlertCircle, ArrowRight, Check, X } from 'lucide-react';
-import { lessonOneData as lessonData } from '../data/course/lessons/unit1/lesson1';
+import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
-export default function LessonScreen({ onExit }) {
+const lessonCatalog = {
+  'U1-L1': lessonOneData
+};
+
+const fallbackLesson = (lessonMeta) => ([
+  {
+    id: 'placeholder-1',
+    type: 'summary',
+    title: lessonMeta?.lessonTitle || 'Lección próximamente',
+    points: [
+      'El contenido detallado de esta lección estará disponible pronto.',
+      'Mientras tanto, puedes revisar otras unidades o lecciones completadas.'
+    ]
+  }
+]);
+
+export default function LessonScreen({ lessonMeta, onExit }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [status, setStatus] = useState('idle');
   const [feedback, setFeedback] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
 
+  const lessonData = useMemo(() => {
+    if (!lessonMeta?.lessonId) return fallbackLesson(lessonMeta);
+    return lessonCatalog[lessonMeta.lessonId] ?? fallbackLesson(lessonMeta);
+  }, [lessonMeta]);
+
+  useEffect(() => {
+    setCurrentStep(0);
+    setStatus('idle');
+    setFeedback('');
+    setSelectedOption(null);
+  }, [lessonMeta]);
+
   const totalSteps = lessonData.length;
-  const currentData = lessonData[currentStep];
+  const currentData = lessonData[currentStep] ?? lessonData[0];
   const progress = useMemo(() => ((currentStep + 1) / totalSteps) * 100, [currentStep, totalSteps]);
 
   const progressNodes = useMemo(
     () => lessonData.map((step, index) => ({ id: step.id, label: step.title ?? step.question, type: step.type, index })),
-    []
+    [lessonData]
   );
 
   const resetFeedback = () => {
