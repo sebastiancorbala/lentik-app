@@ -55,7 +55,10 @@ const LessonItem = ({ lesson, index, isCurrent, onStart }) => {
   }
 
   return (
-    <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group border-b border-white/5 last:border-0">
+    <div
+      className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group border-b border-white/5 last:border-0"
+      onClick={() => onStart?.(lesson)}
+    >
       <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${colorClass}`}>
         {icon}
       </div>
