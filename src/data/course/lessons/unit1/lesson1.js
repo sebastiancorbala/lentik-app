@@ -19,7 +19,6 @@ export const lessonOneData = [
   {
     id: 3,
     type: 'quiz',
-    title: "Comprobación: sujeto principal",
     question: "¿Qué hace que una foto sea confusa para el espectador?",
     options: [
       { id: 'a', text: "Que esté en blanco y negro." },

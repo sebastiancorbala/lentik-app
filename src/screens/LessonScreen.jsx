@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { AlertCircle, ArrowRight, Check, Sparkles, X, Lightbulb, Image as ImageIcon, RotateCcw, Target } from 'lucide-react';
+
 // Importamos los datos desde la ruta correcta
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
@@ -9,7 +8,7 @@ export default function LessonScreen({ onExit = () => {} }) {
   const [status, setStatus] = useState('idle'); // 'idle', 'correct', 'wrong'
   const [feedback, setFeedback] = useState('');
 
-  // Usamos los datos importados. Si fallan, usamos un array vacío para no romper la app.
+  // Usamos los datos importados
   const lessonData = lessonOneData || [];
 
   const totalSteps = lessonData.length;
@@ -67,7 +66,7 @@ export default function LessonScreen({ onExit = () => {} }) {
   }
 
   const handleNext = () => {
-    if (stepIndex < totalSteps - 1) {
+    if (stepIndex < lessonData.length - 1) {
       setStepIndex(prev => prev + 1);
       setStatus('idle');
       setSelectedOption(null);
@@ -97,7 +96,7 @@ export default function LessonScreen({ onExit = () => {} }) {
     }
   };
 
-  // --- RENDERIZADORES ---
+  // --- RENDERIZADORES (DISEÑO CODEX: PURPLE THEME) ---
 
   const RenderTheory = () => (
     <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6">
@@ -115,14 +114,10 @@ export default function LessonScreen({ onExit = () => {} }) {
       )}
 
       <div className="bg-white/5 border border-white/10 rounded-3xl p-5 backdrop-blur flex-1 overflow-y-auto custom-scrollbar">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${tagStyle} mb-3`}>
-          <span className="w-2 h-2 rounded-full bg-current" />
-          Lección teórica
-        </div>
         <h2 className="text-2xl font-black text-white mb-3 leading-tight">{currentStep.title}</h2>
-        <p className="text-gray-200 whitespace-pre-line leading-relaxed text-lg">
+        <div className="text-gray-200 whitespace-pre-line leading-relaxed text-lg">
           {currentStep.content}
-        </p>
+        </div>
         
         {currentStep.tip && (
           <div className="mt-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-amber-100 flex gap-3 items-start">
@@ -147,12 +142,7 @@ export default function LessonScreen({ onExit = () => {} }) {
   const RenderQuiz = (useImages = false) => (
     <div className="flex flex-col h-full animate-in slide-in-from-right duration-500">
       <div className="mb-6">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-semibold ${tagStyle} mb-2`}>
-          <span className="w-2 h-2 rounded-full bg-current" />
-          Quiz interactivo
-        </div>
-        {currentStep.title && <h2 className="text-xl font-bold text-white/60 mb-1">{currentStep.title}</h2>}
-        <h3 className="text-2xl font-black text-white leading-tight">{currentStep.question}</h3>
+        <h2 className="text-2xl font-black text-white leading-tight">{currentStep.question}</h2>
       </div>
 
       {currentStep.image && useImages && (
@@ -173,7 +163,7 @@ export default function LessonScreen({ onExit = () => {} }) {
               key={option.id}
               onClick={() => handleValidation(option)}
               disabled={status !== 'idle'}
-              className={`p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group ${stateClass}`}
+              className={`p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group text-white ${stateClass}`}
             >
               {useImages && option.src ? (
                 <div className="aspect-square rounded-xl overflow-hidden mb-2 bg-black/50">
@@ -181,8 +171,8 @@ export default function LessonScreen({ onExit = () => {} }) {
                 </div>
               ) : null}
               
-              <div className="flex justify-between items-center relative z-10">
-                <span className="font-semibold text-lg">{option.text}</span>
+              <div className="flex justify-between items-center relative z-10 text-white">
+                <span className="font-semibold text-lg leading-snug">{option.text}</span>
                 {status !== 'idle' && option.correct && <Check className="text-emerald-400" />}
                 {status === 'wrong' && selectedOption === option.id && <X className="text-red-400" />}
               </div>
@@ -194,29 +184,34 @@ export default function LessonScreen({ onExit = () => {} }) {
   );
 
   const RenderCompare = () => (
-    <div className="flex flex-col h-full animate-in fade-in">
-      <h2 className="text-lg font-bold text-white mb-6 text-center">{currentStep.instruction}</h2>
-      <div className="grid grid-cols-1 gap-5 flex-1 overflow-y-auto pb-20 custom-scrollbar">
+    <div className="flex flex-col h-full animate-in fade-in duration-500">
+      <div className="mb-6 text-center">
+        <h2 className="text-xl font-black text-white leading-tight">{currentStep.instruction}</h2>
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 flex-1 overflow-y-auto pb-2 custom-scrollbar">
         {currentStep.options.map((opt) => (
-          <div 
+          <button 
             key={opt.id} 
             onClick={() => handleValidation(opt)}
-            className={`relative rounded-2xl overflow-hidden border-4 h-48 cursor-pointer transition-all transform hover:scale-[1.02]
-              ${status === 'idle' ? 'border-transparent hover:border-purple-400' : ''}
-              ${status !== 'idle' && opt.correct ? 'border-green-500 ring-4 ring-green-500/30 z-10' : ''}
-              ${status === 'wrong' && selectedOption === opt.id ? 'border-red-500 opacity-80' : ''}
-              ${status !== 'idle' && !opt.correct && selectedOption !== opt.id ? 'opacity-30 grayscale' : ''}
+            disabled={status !== 'idle'}
+            className={`relative rounded-3xl overflow-hidden border-4 h-52 transition-all transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-yellow-400/70
+              ${status === 'idle' ? 'border-transparent hover:border-purple-400/60' : ''}
+              ${status !== 'idle' && opt.correct ? 'border-emerald-500 ring-4 ring-emerald-500/30 z-10' : ''}
+              ${status === 'wrong' && selectedOption === opt.id ? 'border-red-500 opacity-90' : ''}
+              ${status !== 'idle' && !opt.correct && selectedOption !== opt.id ? 'opacity-40 grayscale' : ''}
             `}
           >
-            <img src={opt.src} alt="Opción" className="w-full h-full object-cover" />
+            <img src={opt.src} alt="Opción de comparación" className="w-full h-full object-cover" />
+
             {status !== 'idle' && (opt.correct || selectedOption === opt.id) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-                <div className={`p-3 rounded-full ${opt.correct ? 'bg-green-500' : 'bg-red-500'} text-white shadow-lg`}>
+              <div className="absolute inset-0 flex items-center justify-center bg-black/55 backdrop-blur-[2px]">
+                <div className={`p-3 rounded-full ${opt.correct ? 'bg-emerald-500' : 'bg-red-500'} text-white shadow-lg`}>
                   {opt.correct ? <Check size={32} strokeWidth={4} /> : <X size={32} strokeWidth={4} />}
                 </div>
               </div>
             )}
-          </div>
+          </button>
         ))}
       </div>
     </div>
@@ -264,16 +259,11 @@ export default function LessonScreen({ onExit = () => {} }) {
         </div>
       </div>
       
-      <h2 className="text-3xl font-black text-white mb-2 tracking-tight">{currentStep.title}</h2>
-      <p className="text-gray-400 mb-8">¡Dominaste el concepto!</p>
-      
-      <div className="w-full bg-[#24243e] rounded-2xl p-6 text-left space-y-4 mb-8 border border-white/5 shadow-lg">
-        {currentStep.points?.map((point, i) => (
-          <div key={i} className="flex items-start gap-3">
-            <div className="bg-emerald-500/20 p-1 rounded-full mt-0.5 shrink-0">
-              <Check size={16} className="text-emerald-400" strokeWidth={3} />
-            </div>
-            <span className="text-gray-200 font-medium text-lg">{point}</span>
+      <h2 className="text-3xl font-black text-white mb-6">{currentStep.title}</h2>
+      <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 text-left space-y-3 mb-8 backdrop-blur">
+        {(currentStep.points ?? []).map((point, index) => (
+          <div key={index} className="flex gap-3 text-gray-100">
+            <Check size={20} className="text-emerald-400 shrink-0" /> {point}
           </div>
         ))}
       </div>
@@ -282,7 +272,6 @@ export default function LessonScreen({ onExit = () => {} }) {
         onClick={handleExit}
         className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
       >
-        <RotateCcw size={20} />
         {currentStep.buttonText || 'Finalizar'}
       </button>
     </div>
@@ -309,7 +298,7 @@ export default function LessonScreen({ onExit = () => {} }) {
         <div className="flex-1 h-3 bg-[#24243e] rounded-full overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-[1px] bg-white/10 z-10"></div>
           <div 
-            className="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+            className="h-full bg-gradient-to-r from-purple-500 via-blue-400 to-cyan-300 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -322,31 +311,41 @@ export default function LessonScreen({ onExit = () => {} }) {
 
       {/* PANEL DE FEEDBACK (MODAL INFERIOR) */}
       {status !== 'idle' && (
-        <div className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-6 rounded-t-3xl border-t border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom duration-300 z-50
-          ${status === 'correct' ? 'bg-[#0f291e]' : 'bg-[#290f0f]'}
-        `}>
-          <div className="flex items-start gap-4 mb-6">
-            <div className={`p-2 rounded-full shrink-0 ${status === 'correct' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
-              {status === 'correct' ? <Check size={28} strokeWidth={4} /> : <X size={28} strokeWidth={4} />}
-            </div>
-            <div>
-              <h3 className={`font-black text-xl mb-1 ${status === 'correct' ? 'text-green-400' : 'text-red-400'}`}>
-                {status === 'correct' ? '¡Increíble!' : 'Casi...'}
-              </h3>
-              <p className="text-white/90 text-base font-medium leading-relaxed">{feedback}</p>
+        <div className={`fixed bottom-0 left-0 right-0 p-6 rounded-t-3xl border-t border-white/10 shadow-2xl animate-in slide-in-from-bottom-10 z-50 max-w-md mx-auto bg-opacity-90 backdrop-blur ${
+            status === 'correct' ? 'bg-emerald-900/80' : 'bg-rose-900/80'
+          }`}
+        >
+          <div className="">
+            <p className="font-bold text-xl text-white mb-1 flex items-center gap-2">
+              {status === 'correct' ? '¡Correcto!' : 'Ups...'}
+            </p>
+            <p className="text-white/80 mb-4 leading-relaxed">{feedback}</p>
+            <div className="flex gap-3">
+              {status === 'wrong' && (
+                <button
+                  onClick={() => {
+                    setStatus('idle');
+                    setFeedback('');
+                    setSelectedOption(null);
+                  }}
+                  className="flex-1 py-3 rounded-2xl font-bold uppercase text-white bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center gap-2"
+                >
+                  <AlertCircle size={18} />
+                  Reintentar
+                </button>
+              )}
+              <button
+                onClick={handleNext}
+                className={`flex-1 py-3 rounded-2xl font-bold uppercase text-white flex items-center justify-center gap-2 ${
+                  status === 'correct' ? 'bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300' : 'bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-400 hover:to-orange-300'
+                }`}
+                disabled={currentStep.type === 'summary'}
+              >
+                <ArrowRight size={18} />
+                Continuar
+              </button>
             </div>
           </div>
-          
-          <button 
-            onClick={handleNext}
-            className={`w-full py-4 rounded-xl font-black text-white text-lg uppercase tracking-wide shadow-lg transition-transform active:scale-95
-              ${status === 'correct' 
-                ? 'bg-green-500 hover:bg-green-400 shadow-green-900/50' 
-                : 'bg-red-500 hover:bg-red-400 shadow-red-900/50'}
-            `}
-          >
-            CONTINUAR
-          </button>
         </div>
       )}
     </div>
