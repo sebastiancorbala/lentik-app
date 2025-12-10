@@ -3,7 +3,7 @@ export const lessonOneData = [
     id: 1,
     type: 'theory',
     title: "Todo necesita un protagonista",
-    image: "https://images.unsplash.com/photo-1507765106233-a309990aa4bd?q=80&w=1200&auto=format&fit=crop",
+
     content:
       "Imagina una película donde no sabes quién es el personaje principal. Sería confusa y aburrida, ¿verdad?\n\nLo mismo ocurre con la fotografía. Cuando miramos una imagen, nuestros ojos buscan instintivamente un punto donde concentrarnos.",
     buttonText: "Siguiente"
@@ -14,7 +14,7 @@ export const lessonOneData = [
     title: "El error del principiante",
     image: "https://images.unsplash.com/photo-1546452230-0a2a4b087095?q=80&w=1200&auto=format&fit=crop",
     content:
-      "El error número 1 es intentar fotografiar 'todo a la vez': el paisaje, tu amigo, el perro y el coche... todo en el mismo encuadre. Si todo es importante, nada lo es.\n\nPor eso debes tener claro qué buscar fotografiar. Saber por qué haces la foto y qué quieres capturar. (También puede haber más de un protagonista, pero por ahora practica con uno solo)\n\nTip Destacado: Tu Misión: Antes de disparar, pregúntate: '¿De qué trata esta foto?'. Elige UN solo elemento (tu Sujeto) y dale prioridad.",
+
     tip: 'Antes de disparar, pregúntate: "¿De qué trata esta foto?". Elige UN solo elemento (tu Sujeto) y dale prioridad.',
     buttonText: "Entendido"
   },

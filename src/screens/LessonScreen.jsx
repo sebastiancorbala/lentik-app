@@ -76,9 +76,7 @@ export default function LessonScreen({ lessonMeta, onExit }) {
   const renderTheory = () => (
     <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6">
       {currentData.image && (
-        <div className="relative w-full min-h-[260px] max-h-[440px] aspect-[4/5] md:aspect-[16/9] rounded-3xl overflow-hidden border border-white/5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.6)] bg-gradient-to-br from-indigo-900/30 to-slate-900/40">
-          <img src={currentData.image} className="absolute inset-0 w-full h-full object-contain" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
           <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-sm text-white/80">
             <span className="px-3 py-1 rounded-full border border-white/20 bg-white/10 font-semibold">
               Inspiración visual
@@ -131,12 +129,7 @@ export default function LessonScreen({ lessonMeta, onExit }) {
         <h2 className="text-2xl font-black text-white mb-2">{currentData.title}</h2>
       )}
       {currentData.image && (
-        <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.6)] bg-black/30">
-          <img
-            src={currentData.image}
-            alt="Contenido de la pregunta"
-            className="absolute inset-0 w-full h-full object-contain"
-          />
+
         </div>
       )}
       {currentData.instruction && <p className="text-gray-300 mb-1 text-sm uppercase tracking-wide">{currentData.instruction}</p>}
@@ -151,9 +144,7 @@ export default function LessonScreen({ lessonMeta, onExit }) {
             }`}
           >
             {useImages && option.src && (
-              <div className="relative w-full aspect-[4/3] bg-black/30 rounded-xl overflow-hidden">
-                <img src={option.src} alt="Opción" className="absolute inset-0 w-full h-full object-contain" />
-              </div>
+
             )}
             <span className="text-white font-semibold text-base">{option.text || option.label}</span>
           </button>
@@ -178,9 +169,7 @@ export default function LessonScreen({ lessonMeta, onExit }) {
               selectedOption === option.id ? 'ring-2 ring-blue-400/80' : ''
             }`}
           >
-            <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] bg-black/30">
-              <img src={option.src} alt="Comparación" className="absolute inset-0 w-full h-full object-contain" />
-            </div>
+
           </button>
         ))}
       </div>
