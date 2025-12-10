@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { AlertCircle, ArrowRight, Check, X } from 'lucide-react';
+import { AlertCircle, ArrowRight, Check, Sparkles, X } from 'lucide-react';
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
 const lessonCatalog = {
@@ -33,6 +33,14 @@ export default function LessonScreen({ lessonMeta, onExit }) {
   const currentData = lessonData[currentStep] ?? lessonData[0];
   const progress = useMemo(() => ((currentStep + 1) / totalSteps) * 100, [currentStep, totalSteps]);
 
+  const tagStyle = useMemo(() => ({
+    theory: 'bg-indigo-500/20 text-indigo-200 border-indigo-400/30',
+    quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
+    compare: 'bg-amber-500/15 text-amber-100 border-amber-400/30',
+    image_quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
+    summary: 'bg-emerald-500/15 text-emerald-100 border-emerald-400/30'
+  })[currentData.type] || 'bg-white/10 text-white border-white/20', [currentData.type]);
+
   const resetFeedback = () => {
     setStatus('idle');
     setFeedback('');
@@ -65,49 +73,91 @@ export default function LessonScreen({ lessonMeta, onExit }) {
   };
 
 
-  const renderTheory = () => (
-    <div className="flex flex-col h-full animate-in fade-in duration-500">
-      {currentData.image && (
-        <div className="h-64 rounded-2xl overflow-hidden mb-6 border border-gray-800">
-          <img src={currentData.image} className="w-full h-full object-cover" />
+  const renderTheory = () => {
+    return (
+      <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6">
+        {currentData.image && (
+          <div className="relative w-full min-h-[260px] max-h-[440px] aspect-[4/5] md:aspect-[16/9] rounded-3xl overflow-hidden border border-white/5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.6)] bg-gradient-to-br from-indigo-900/30 to-slate-900/40">
+            <img src={currentData.image} alt="Inspiración de la lección" className="absolute inset-0 w-full h-full object-contain" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-sm text-white/80">
+              <span className="px-3 py-1 rounded-full border border-white/20 bg-white/10 font-semibold">
+                Inspiración visual
+              </span>
+              <Sparkles size={18} className="text-yellow-300 drop-shadow" />
+            </div>
+          </div>
+        )}
+
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-5 backdrop-blur">
+          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${tagStyle}`}>
+            <span className="w-2 h-2 rounded-full bg-current" />
+            Lección teórica
+          </div>
+          <h2 className="text-3xl font-black text-white mt-3 mb-3 leading-tight">{currentData.title}</h2>
+          <p className="text-gray-200 whitespace-pre-line leading-relaxed text-lg">
+            {currentData.content}
+          </p>
+          {currentData.tip && (
+            <div className="mt-4 p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-amber-100 flex gap-3 items-start">
+              <Sparkles className="mt-1" size={18} />
+              <div>
+                <p className="text-sm uppercase tracking-wide font-semibold text-amber-200">Tip destacado</p>
+                <p className="text-amber-50 leading-relaxed">{currentData.tip}</p>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      <h2 className="text-2xl font-bold text-white mb-4">{currentData.title}</h2>
-      <p className="text-gray-300 whitespace-pre-line leading-relaxed">{currentData.content}</p>
-      <button
-        onClick={handleNext}
-        className="mt-auto w-full bg-blue-600 py-4 rounded-xl font-bold text-white uppercase hover:bg-blue-500"
-      >
-        {currentData.buttonText || 'Continuar'}
-      </button>
-    </div>
-  );
+
+        <button
+          onClick={handleNext}
+          className="mt-auto w-full bg-gradient-to-r from-purple-500 to-blue-500 py-4 rounded-2xl font-bold text-white uppercase tracking-wide shadow-lg shadow-purple-500/30 hover:from-purple-400 hover:to-blue-400"
+        >
+          {currentData.buttonText || 'Continuar'}
+        </button>
+      </div>
+    );
+  };
 
   const renderQuiz = (useImages = false) => (
     <div className="flex flex-col h-full">
       {currentData.title && (
-        <h2 className="text-2xl font-bold text-white mb-4">{currentData.title}</h2>
-      )}
-      {currentData.image && (
-        <div className="h-64 rounded-2xl overflow-hidden mb-4 border border-gray-800">
-          <img src={currentData.image} alt="Contenido de la pregunta" className="w-full h-full object-cover" />
+        <div className="flex items-center gap-2 mb-2">
+          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-semibold ${tagStyle}`}>
+            <span className="w-2 h-2 rounded-full bg-current" />
+            Quiz interactivo
+          </div>
         </div>
       )}
-      {currentData.instruction && <p className="text-gray-400 mb-2">{currentData.instruction}</p>}
-      {currentData.question && <p className="text-gray-300 mb-4">{currentData.question}</p>}
+      {currentData.title && (
+        <h2 className="text-2xl font-black text-white mb-2">{currentData.title}</h2>
+      )}
+      {currentData.image && (
+        <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.6)] bg-black/30">
+          <img
+            src={currentData.image}
+            alt="Contenido de la pregunta"
+            className="absolute inset-0 w-full h-full object-contain"
+          />
+        </div>
+      )}
+      {currentData.instruction && <p className="text-gray-300 mb-1 text-sm uppercase tracking-wide">{currentData.instruction}</p>}
+      {currentData.question && <p className="text-gray-100 mb-4 text-lg font-semibold">{currentData.question}</p>}
       <div className={useImages ? 'grid grid-cols-2 gap-4' : 'flex flex-col gap-3'}>
         {currentData.options?.map((option) => (
           <button
             key={option.id}
             onClick={() => handleOptionSelect(option)}
-            className={`rounded-xl border border-gray-800 bg-white/5 text-left p-4 hover:bg-white/10 transition flex flex-col gap-3 ${
-              selectedOption === option.id ? 'ring-2 ring-blue-400' : ''
+            className={`rounded-2xl border border-white/10 bg-white/5 text-left p-4 hover:bg-white/10 transition flex flex-col gap-3 backdrop-blur ${
+              selectedOption === option.id ? 'ring-2 ring-blue-400/80 shadow-[0_0_30px_-10px_rgba(59,130,246,0.7)]' : ''
             }`}
           >
             {useImages && option.src && (
-              <img src={option.src} alt="Opción" className="w-full h-32 object-cover rounded-lg" />
+              <div className="relative w-full aspect-[4/3] bg-black/30 rounded-xl overflow-hidden">
+                <img src={option.src} alt="Opción" className="absolute inset-0 w-full h-full object-contain" />
+              </div>
             )}
-            <span className="text-white font-semibold">{option.text || option.label}</span>
+            <span className="text-white font-semibold text-base">{option.text || option.label}</span>
           </button>
         ))}
       </div>
@@ -116,17 +166,23 @@ export default function LessonScreen({ lessonMeta, onExit }) {
 
   const renderCompare = () => (
     <div className="flex flex-col h-full">
-      <h2 className="text-2xl font-bold text-white mb-3">{currentData.instruction}</h2>
+      <div className={`inline-flex w-fit items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-semibold ${tagStyle} mb-3`}>
+        <span className="w-2 h-2 rounded-full bg-current" />
+        Busca el sujeto
+      </div>
+      <h2 className="text-2xl font-black text-white mb-3 leading-tight">{currentData.instruction}</h2>
       <div className="grid grid-cols-2 gap-4">
         {currentData.options?.map((option) => (
           <button
             key={option.id}
             onClick={() => handleOptionSelect(option)}
-            className={`rounded-xl overflow-hidden border border-gray-800 hover:border-blue-500 transition ${
-              selectedOption === option.id ? 'ring-2 ring-blue-400' : ''
+            className={`rounded-2xl overflow-hidden border border-white/10 hover:border-blue-400/60 transition shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)] ${
+              selectedOption === option.id ? 'ring-2 ring-blue-400/80' : ''
             }`}
           >
-            <img src={option.src} alt="Comparación" className="w-full h-40 object-cover" />
+            <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] bg-black/30">
+              <img src={option.src} alt="Comparación" className="absolute inset-0 w-full h-full object-contain" />
+            </div>
           </button>
         ))}
       </div>
@@ -135,20 +191,20 @@ export default function LessonScreen({ lessonMeta, onExit }) {
 
   const renderSummary = () => (
     <div className="flex flex-col h-full items-center justify-center text-center">
-      <div className="w-24 h-24 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6 text-emerald-400">
+      <div className="w-24 h-24 bg-emerald-500/15 rounded-full flex items-center justify-center mb-6 text-emerald-300 border border-emerald-400/30">
         <Check size={48} />
       </div>
-      <h2 className="text-3xl font-black text-white mb-8">{currentData.title}</h2>
-      <div className="w-full bg-gray-800 rounded-2xl p-6 text-left space-y-3 mb-8">
+      <h2 className="text-3xl font-black text-white mb-6">{currentData.title}</h2>
+      <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 text-left space-y-3 mb-8 backdrop-blur">
         {currentData.points.map((point, index) => (
-          <div key={index} className="flex gap-3 text-gray-300">
-            <Check size={20} className="text-emerald-500 shrink-0" /> {point}
+          <div key={index} className="flex gap-3 text-gray-100">
+            <Check size={20} className="text-emerald-400 shrink-0" /> {point}
           </div>
         ))}
       </div>
       <button
         onClick={onExit}
-        className="w-full bg-white text-black py-4 rounded-xl font-bold uppercase hover:bg-gray-200"
+        className="w-full bg-gradient-to-r from-emerald-500 to-teal-400 text-black py-4 rounded-2xl font-bold uppercase hover:from-emerald-400 hover:to-teal-300"
       >
         Volver al mapa
       </button>
@@ -172,33 +228,40 @@ export default function LessonScreen({ lessonMeta, onExit }) {
   };
 
   return (
-    <div className="h-screen bg-gray-900 flex flex-col p-6 text-white">
-      <div className="flex items-center gap-4 mb-4">
-        <button onClick={onExit} aria-label="Salir de la lección">
-          <X className="text-gray-500 hover:text-white" />
+    <div className="h-screen bg-gradient-to-br from-[#0b0a1f] via-[#12102f] to-[#0a0b18] flex flex-col p-6 text-white">
+      <div className="flex items-center gap-4 mb-5">
+        <button onClick={onExit} aria-label="Salir de la lección" className="p-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10">
+          <X className="text-white" />
         </button>
-        <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-300" style={{ width: `${progress}%` }}></div>
+        <div className="flex-1">
+          <div className="flex justify-between items-center text-xs text-gray-400 mb-1">
+            <span className="font-semibold uppercase tracking-wide">Progreso</span>
+            <span className="font-semibold text-white/80">Paso {currentStep + 1} de {totalSteps}</span>
+          </div>
+          <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-300 transition-all duration-500" style={{ width: `${progress}%` }}></div>
+          </div>
         </div>
-        <div className="text-sm text-gray-400 font-semibold">{currentStep + 1}/{totalSteps}</div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-20">{renderCurrentStep()}</div>
+      <div className="flex-1 overflow-y-auto pb-24 custom-scrollbar">{renderCurrentStep()}</div>
 
       {status !== 'idle' && (
         <div
-          className={`fixed bottom-0 left-0 right-0 p-6 rounded-t-3xl border-t border-white/10 shadow-2xl animate-in slide-in-from-bottom-10 z-50 ${
-            status === 'correct' ? 'bg-emerald-900' : 'bg-rose-900'
+          className={`fixed bottom-0 left-0 right-0 p-6 rounded-t-3xl border-t border-white/10 shadow-2xl animate-in slide-in-from-bottom-10 z-50 max-w-md mx-auto bg-opacity-90 backdrop-blur ${
+            status === 'correct' ? 'bg-emerald-900/80' : 'bg-rose-900/80'
           }`}
         >
-          <div className="max-w-md mx-auto">
-            <p className="font-bold text-xl text-white mb-2">{status === 'correct' ? '¡Correcto!' : 'Ups...'}</p>
-            <p className="text-white/80 mb-4">{feedback}</p>
+          <div className="">
+            <p className="font-bold text-xl text-white mb-1 flex items-center gap-2">
+              {status === 'correct' ? '¡Correcto!' : 'Ups...'}
+            </p>
+            <p className="text-white/80 mb-4 leading-relaxed">{feedback}</p>
             <div className="flex gap-3">
               {status === 'wrong' && (
                 <button
                   onClick={resetFeedback}
-                  className="flex-1 py-3 rounded-xl font-bold uppercase text-white bg-gray-700 hover:bg-gray-600 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 rounded-2xl font-bold uppercase text-white bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center gap-2"
                 >
                   <AlertCircle size={18} />
                   Reintentar
@@ -206,8 +269,8 @@ export default function LessonScreen({ lessonMeta, onExit }) {
               )}
               <button
                 onClick={handleNext}
-                className={`flex-1 py-3 rounded-xl font-bold uppercase text-white flex items-center justify-center gap-2 ${
-                  status === 'correct' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-rose-600 hover:bg-rose-500'
+                className={`flex-1 py-3 rounded-2xl font-bold uppercase text-white flex items-center justify-center gap-2 ${
+                  status === 'correct' ? 'bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300' : 'bg-gradient-to-r from-rose-500 to-orange-400 hover:from-rose-400 hover:to-orange-300'
                 }`}
                 disabled={currentData.type === 'summary'}
               >
