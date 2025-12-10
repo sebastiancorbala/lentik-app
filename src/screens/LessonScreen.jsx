@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { AlertCircle, ArrowRight, Check, Sparkles, X, Lightbulb, Image as ImageIcon, RotateCcw, Target } from 'lucide-react';
+import React, { useState } from 'react';
+import { Check, X, Lightbulb, RotateCcw, Target } from 'lucide-react';
 // Importamos los datos desde la ruta correcta
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
@@ -16,16 +16,6 @@ export default function LessonScreen({ onExit }) {
   const currentStep = lessonData[stepIndex];
   const totalSteps = lessonData.length;
   const progress = totalSteps > 0 ? ((stepIndex + 1) / totalSteps) * 100 : 0;
-
-  // Estilos dinámicos para las etiquetas según el tipo
-  const currentType = currentStep?.type || 'theory';
-  const tagStyle = useMemo(() => ({
-    theory: 'bg-indigo-500/20 text-indigo-200 border-indigo-400/30',
-    quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
-    compare: 'bg-amber-500/15 text-amber-100 border-amber-400/30',
-    image_quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
-    summary: 'bg-emerald-500/15 text-emerald-100 border-emerald-400/30'
-  })[currentType] || 'bg-white/10 text-white border-white/20', [currentType]);
 
   if (!currentStep) return <div className="text-white p-10 text-center">Cargando lección...</div>;
 
@@ -69,20 +59,10 @@ export default function LessonScreen({ onExit }) {
         <div className="relative w-full min-h-[240px] max-h-[300px] rounded-3xl overflow-hidden border border-white/5 shadow-2xl bg-black shrink-0">
           <img src={currentStep.image} alt="Inspiración" className="absolute inset-0 w-full h-full object-cover opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0f0c29] via-transparent to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-sm text-white/80">
-            <span className="px-3 py-1 rounded-full border border-white/20 bg-white/10 font-semibold backdrop-blur-md">
-              Inspiración visual
-            </span>
-            <Sparkles size={18} className="text-yellow-300 drop-shadow" />
-          </div>
         </div>
       )}
 
       <div className="bg-white/5 border border-white/10 rounded-3xl p-5 backdrop-blur flex-1 overflow-y-auto custom-scrollbar">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${tagStyle} mb-3`}>
-          <span className="w-2 h-2 rounded-full bg-current" />
-          Lección teórica
-        </div>
         <h2 className="text-2xl font-black text-white mb-3 leading-tight">{currentStep.title}</h2>
         <p className="text-gray-200 whitespace-pre-line leading-relaxed text-lg">
           {currentStep.content}
@@ -111,11 +91,6 @@ export default function LessonScreen({ onExit }) {
   const RenderQuiz = (useImages = false) => (
     <div className="flex flex-col h-full animate-in slide-in-from-right duration-500">
       <div className="mb-6">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-semibold ${tagStyle} mb-2`}>
-          <span className="w-2 h-2 rounded-full bg-current" />
-          Quiz interactivo
-        </div>
-        {currentStep.title && <h2 className="text-xl font-bold text-white/60 mb-1">{currentStep.title}</h2>}
         <h3 className="text-2xl font-black text-white leading-tight">{currentStep.question}</h3>
       </div>
 
@@ -137,7 +112,7 @@ export default function LessonScreen({ onExit }) {
               key={option.id}
               onClick={() => handleValidation(option)}
               disabled={status !== 'idle'}
-              className={`p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group ${stateClass}`}
+              className={`p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group text-white ${stateClass}`}
             >
               {useImages && option.src ? (
                 <div className="aspect-square rounded-xl overflow-hidden mb-2 bg-black/50">
@@ -145,8 +120,8 @@ export default function LessonScreen({ onExit }) {
                 </div>
               ) : null}
               
-              <div className="flex justify-between items-center relative z-10">
-                <span className="font-semibold text-lg">{option.text}</span>
+              <div className="flex justify-between items-center relative z-10 text-white">
+                <span className="font-semibold text-lg leading-snug">{option.text}</span>
                 {status !== 'idle' && option.correct && <Check className="text-emerald-400" />}
                 {status === 'wrong' && selectedOption === option.id && <X className="text-red-400" />}
               </div>
@@ -158,29 +133,12 @@ export default function LessonScreen({ onExit }) {
   );
 
   const RenderCompare = () => (
-    <div className="flex flex-col h-full animate-in fade-in">
-      <h2 className="text-lg font-bold text-white mb-6 text-center">{currentStep.instruction}</h2>
-      <div className="grid grid-cols-1 gap-5 flex-1 overflow-y-auto pb-20 custom-scrollbar">
-        {currentStep.options.map((opt) => (
-          <div 
-            key={opt.id} 
-            onClick={() => handleValidation(opt)}
-            className={`relative rounded-2xl overflow-hidden border-4 h-48 cursor-pointer transition-all transform hover:scale-[1.02]
-              ${status === 'idle' ? 'border-transparent hover:border-purple-400' : ''}
-              ${status !== 'idle' && opt.correct ? 'border-green-500 ring-4 ring-green-500/30 z-10' : ''}
-              ${status === 'wrong' && selectedOption === opt.id ? 'border-red-500 opacity-80' : ''}
-              ${status !== 'idle' && !opt.correct && selectedOption !== opt.id ? 'opacity-30 grayscale' : ''}
-            `}
-          >
-            <img src={opt.src} alt="Opción" className="w-full h-full object-cover" />
-            {status !== 'idle' && (opt.correct || selectedOption === opt.id) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-                <div className={`p-3 rounded-full ${opt.correct ? 'bg-green-500' : 'bg-red-500'} text-white shadow-lg`}>
+
                   {opt.correct ? <Check size={32} strokeWidth={4} /> : <X size={32} strokeWidth={4} />}
                 </div>
               </div>
             )}
-          </div>
+
         ))}
       </div>
     </div>
@@ -190,9 +148,6 @@ export default function LessonScreen({ onExit }) {
     <div className="flex flex-col h-full animate-in fade-in">
       <div className="w-full h-60 rounded-2xl overflow-hidden mb-6 border border-white/20 shadow-lg relative bg-black shrink-0">
         <img src={currentStep.image} alt="Quiz" className="w-full h-full object-cover" />
-        <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/10">
-          <ImageIcon size={12} className="inline mr-1" /> Analiza
-        </div>
       </div>
       
       <h3 className="text-white font-bold text-lg mb-4">{currentStep.question}</h3>
