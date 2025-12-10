@@ -101,7 +101,7 @@ export default function LessonScreen({ onExit }) {
 
       <button
         onClick={handleNext}
-        className="mt-auto w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-bold text-white uppercase tracking-wide shadow-lg shadow-purple-900/40 hover:brightness-110 active:scale-95 transition-all"
+        className="mt-auto w-full bg-gradient-to-r from-purple-600 via-purple-500 to-fuchsia-500 py-4 rounded-2xl font-bold text-white uppercase tracking-wide shadow-lg shadow-purple-900/40 hover:brightness-110 active:scale-95 transition-all"
       >
         {currentStep.buttonText || 'Continuar'}
       </button>
