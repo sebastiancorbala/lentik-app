@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { AlertCircle, ArrowRight, Check, X } from 'lucide-react';
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
@@ -29,21 +29,9 @@ export default function LessonScreen({ lessonMeta, onExit }) {
     return lessonCatalog[lessonMeta.lessonId] ?? fallbackLesson(lessonMeta);
   }, [lessonMeta]);
 
-  useEffect(() => {
-    setCurrentStep(0);
-    setStatus('idle');
-    setFeedback('');
-    setSelectedOption(null);
-  }, [lessonMeta]);
-
   const totalSteps = lessonData.length;
   const currentData = lessonData[currentStep] ?? lessonData[0];
   const progress = useMemo(() => ((currentStep + 1) / totalSteps) * 100, [currentStep, totalSteps]);
-
-  const progressNodes = useMemo(
-    () => lessonData.map((step, index) => ({ id: step.id, label: step.title ?? step.question, type: step.type, index })),
-    [lessonData]
-  );
 
   const resetFeedback = () => {
     setStatus('idle');
@@ -76,38 +64,6 @@ export default function LessonScreen({ lessonMeta, onExit }) {
     }
   };
 
-  const renderProgressDots = () => (
-    <div className="flex flex-wrap gap-2 mb-6 justify-center">
-      {progressNodes.map((node) => {
-        const isActive = node.index === currentStep;
-        const isDone = node.index < currentStep;
-        const baseColor = node.type === 'test' ? 'border-amber-500 text-amber-300' : 'border-blue-500 text-blue-300';
-        const fillColor = node.type === 'test' ? 'bg-amber-500/20' : 'bg-blue-500/20';
-
-        const displaySymbol = () => {
-          if (node.type === 'test') return 'T';
-          if (isDone || node.type === 'summary') return <Check size={16} />;
-          return null;
-        };
-
-        return (
-          <div key={node.id} className="flex flex-col items-center min-w-[56px]">
-            <div
-              className={`w-12 h-12 rounded-full border flex items-center justify-center font-bold text-sm ${baseColor} ${
-                isActive ? fillColor : ''
-              } ${isDone ? 'bg-white/10 border-white/20 text-white' : ''}`}
-            >
-
-            </div>
-            <p className="text-[11px] text-gray-400 text-center mt-1 leading-tight line-clamp-2">
-              {node.type === 'summary' ? 'Resumen' : node.label}
-            </p>
-          </div>
-        );
-      })}
-    </div>
-  );
-
   const renderTheory = () => (
     <div className="flex flex-col h-full animate-in fade-in duration-500">
       {currentData.image && (
@@ -131,6 +87,12 @@ export default function LessonScreen({ lessonMeta, onExit }) {
       {currentData.title && (
         <h2 className="text-2xl font-bold text-white mb-4">{currentData.title}</h2>
       )}
+      {currentData.image && (
+        <div className="h-64 rounded-2xl overflow-hidden mb-4 border border-gray-800">
+          <img src={currentData.image} alt="Contenido de la pregunta" className="w-full h-full object-cover" />
+        </div>
+      )}
+      {currentData.instruction && <p className="text-gray-400 mb-2">{currentData.instruction}</p>}
       {currentData.question && <p className="text-gray-300 mb-4">{currentData.question}</p>}
       <div className={useImages ? 'grid grid-cols-2 gap-4' : 'flex flex-col gap-3'}>
         {currentData.options?.map((option) => (
@@ -219,8 +181,6 @@ export default function LessonScreen({ lessonMeta, onExit }) {
         </div>
         <div className="text-sm text-gray-400 font-semibold">{currentStep + 1}/{totalSteps}</div>
       </div>
-
-      {renderProgressDots()}
 
       <div className="flex-1 overflow-y-auto pb-20">{renderCurrentStep()}</div>
 
