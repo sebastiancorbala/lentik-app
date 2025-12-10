@@ -64,6 +64,7 @@ export default function LessonScreen({ lessonMeta, onExit }) {
     }
   };
 
+
   const renderTheory = () => (
     <div className="flex flex-col h-full animate-in fade-in duration-500">
       {currentData.image && (
