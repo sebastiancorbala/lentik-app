@@ -1,15 +1,4 @@
-import React, { useState } from 'react';
-import { 
-  ChevronRight, 
-  X, 
-  Check, 
-  ArrowRight, 
-  RotateCcw, 
-  Target, 
-  Lightbulb, 
-  Image as ImageIcon,
-  AlertCircle
-} from 'lucide-react';
+
 // Importamos los datos desde la ruta correcta
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
@@ -21,13 +10,20 @@ export default function LessonScreen({ onExit = () => {} }) {
 
   // Usamos los datos importados
   const lessonData = lessonOneData || [];
-  
-  // Fallback de seguridad
-  const currentStep = lessonData[stepIndex];
+
   const totalSteps = lessonData.length;
+  const currentStep = lessonData[stepIndex];
   const progress = totalSteps > 0 ? ((stepIndex + 1) / totalSteps) * 100 : 0;
 
-  if (!currentStep) return <div className="text-white p-10 text-center">Cargando lección...</div>;
+  // Estilos dinámicos para las etiquetas según el tipo
+  const currentType = currentStep?.type || 'theory';
+  const tagStyle = useMemo(() => ({
+    theory: 'bg-indigo-500/20 text-indigo-200 border-indigo-400/30',
+    quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
+    compare: 'bg-amber-500/15 text-amber-100 border-amber-400/30',
+    image_quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
+    summary: 'bg-emerald-500/15 text-emerald-100 border-emerald-400/30'
+  })[currentType] || 'bg-white/10 text-white border-white/20', [currentType]);
 
   // --- LÓGICA ---
   const resetLessonState = () => {
@@ -41,6 +37,33 @@ export default function LessonScreen({ onExit = () => {} }) {
     resetLessonState();
     onExit();
   };
+
+  useEffect(() => {
+    if (totalSteps === 0) return;
+    if (stepIndex >= totalSteps) {
+      resetLessonState();
+    }
+  }, [stepIndex, totalSteps]);
+
+  if (!currentStep) {
+    return (
+      <div className="fixed inset-0 bg-[#0f0c29] z-50 flex flex-col items-center justify-center text-center px-8">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 max-w-sm w-full space-y-4">
+          <div className="w-12 h-12 rounded-full bg-yellow-500/20 border border-yellow-400/50 flex items-center justify-center mx-auto">
+            <AlertCircle className="text-yellow-300" />
+          </div>
+          <h2 className="text-white text-xl font-bold">Cargando lección...</h2>
+          <p className="text-gray-300 text-sm">Si algo falla, vuelve al mapa e inténtalo de nuevo.</p>
+          <button
+            onClick={handleExit}
+            className="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-fuchsia-500 py-3 rounded-xl font-semibold text-white hover:brightness-110 active:scale-95 transition-all"
+          >
+            Volver al mapa
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleNext = () => {
     if (stepIndex < lessonData.length - 1) {
@@ -244,9 +267,10 @@ export default function LessonScreen({ onExit = () => {} }) {
           </div>
         ))}
       </div>
+      
       <button
         onClick={handleExit}
-        className="w-full bg-gradient-to-r from-emerald-500 to-teal-400 text-black py-4 rounded-2xl font-bold uppercase hover:from-emerald-400 hover:to-teal-300"
+        className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
       >
         {currentStep.buttonText || 'Finalizar'}
       </button>
