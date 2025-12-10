@@ -133,34 +133,12 @@ export default function LessonScreen({ onExit }) {
   );
 
   const RenderCompare = () => (
-    <div className="flex flex-col h-full animate-in fade-in duration-500">
-      <div className="mb-6 text-center">
-        <h2 className="text-xl font-black text-white leading-tight">{currentStep.instruction}</h2>
-      </div>
 
-      <div className="grid grid-cols-1 gap-5 flex-1 overflow-y-auto pb-2 custom-scrollbar">
-        {currentStep.options?.map((opt) => (
-          <button
-            key={opt.id}
-            onClick={() => handleValidation(opt)}
-            disabled={status !== 'idle'}
-            className={`relative rounded-3xl overflow-hidden border-4 h-52 transition-all transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-yellow-400/70
-              ${status === 'idle' ? 'border-transparent hover:border-purple-400/60' : ''}
-              ${status !== 'idle' && opt.correct ? 'border-emerald-500 ring-4 ring-emerald-500/30 z-10' : ''}
-              ${status === 'wrong' && selectedOption === opt.id ? 'border-red-500 opacity-90' : ''}
-              ${status !== 'idle' && !opt.correct && selectedOption !== opt.id ? 'opacity-40 grayscale' : ''}
-            `}
-          >
-            <img src={opt.src} alt="Opción de comparación" className="w-full h-full object-cover" />
-
-            {status !== 'idle' && (opt.correct || selectedOption === opt.id) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/55 backdrop-blur-[2px]">
-                <div className={`p-3 rounded-full ${opt.correct ? 'bg-emerald-500' : 'bg-red-500'} text-white shadow-lg`}>
                   {opt.correct ? <Check size={32} strokeWidth={4} /> : <X size={32} strokeWidth={4} />}
                 </div>
               </div>
             )}
-          </button>
+
         ))}
       </div>
     </div>
@@ -233,7 +211,7 @@ export default function LessonScreen({ onExit }) {
     switch (currentStep.type) {
       case 'theory': return <RenderTheory />;
       case 'quiz': return <RenderQuiz />;
-      case 'compare': return <RenderCompare />;
+      case 'compare': return <RenderCompare />; 
       case 'image_quiz': return <RenderImageQuiz />; 
       case 'summary': return <RenderSummary />;
       default: return <div className="text-white">Tipo desconocido: {currentStep.type}</div>;
