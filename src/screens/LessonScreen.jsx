@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AlertCircle, ArrowRight, Check, Sparkles, X, Lightbulb, Image as ImageIcon, RotateCcw, Target } from 'lucide-react';
 // Importamos los datos desde la ruta correcta
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
-export default function LessonScreen({ onExit }) {
+export default function LessonScreen({ onExit = () => {} }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [status, setStatus] = useState('idle'); // 'idle', 'correct', 'wrong'
@@ -11,10 +11,9 @@ export default function LessonScreen({ onExit }) {
 
   // Usamos los datos importados. Si fallan, usamos un array vacío para no romper la app.
   const lessonData = lessonOneData || [];
-  
-  // Fallback de seguridad
-  const currentStep = lessonData[stepIndex];
+
   const totalSteps = lessonData.length;
+  const currentStep = lessonData[stepIndex];
   const progress = totalSteps > 0 ? ((stepIndex + 1) / totalSteps) * 100 : 0;
 
   // Estilos dinámicos para las etiquetas según el tipo
@@ -27,9 +26,46 @@ export default function LessonScreen({ onExit }) {
     summary: 'bg-emerald-500/15 text-emerald-100 border-emerald-400/30'
   })[currentType] || 'bg-white/10 text-white border-white/20', [currentType]);
 
-  if (!currentStep) return <div className="text-white p-10 text-center">Cargando lección...</div>;
-
   // --- LÓGICA ---
+  const resetLessonState = () => {
+    setStepIndex(0);
+    setStatus('idle');
+    setSelectedOption(null);
+    setFeedback('');
+  };
+
+  const handleExit = () => {
+    resetLessonState();
+    onExit();
+  };
+
+  useEffect(() => {
+    if (totalSteps === 0) return;
+    if (stepIndex >= totalSteps) {
+      resetLessonState();
+    }
+  }, [stepIndex, totalSteps]);
+
+  if (!currentStep) {
+    return (
+      <div className="fixed inset-0 bg-[#0f0c29] z-50 flex flex-col items-center justify-center text-center px-8">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 max-w-sm w-full space-y-4">
+          <div className="w-12 h-12 rounded-full bg-yellow-500/20 border border-yellow-400/50 flex items-center justify-center mx-auto">
+            <AlertCircle className="text-yellow-300" />
+          </div>
+          <h2 className="text-white text-xl font-bold">Cargando lección...</h2>
+          <p className="text-gray-300 text-sm">Si algo falla, vuelve al mapa e inténtalo de nuevo.</p>
+          <button
+            onClick={handleExit}
+            className="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-fuchsia-500 py-3 rounded-xl font-semibold text-white hover:brightness-110 active:scale-95 transition-all"
+          >
+            Volver al mapa
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const handleNext = () => {
     if (stepIndex < totalSteps - 1) {
       setStepIndex(prev => prev + 1);
@@ -37,7 +73,7 @@ export default function LessonScreen({ onExit }) {
       setSelectedOption(null);
       setFeedback('');
     } else {
-      onExit(); // Salir
+      handleExit(); // Salir y reiniciar estado
     }
   };
 
@@ -101,7 +137,7 @@ export default function LessonScreen({ onExit }) {
 
       <button
         onClick={handleNext}
-        className="mt-auto w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-bold text-white uppercase tracking-wide shadow-lg shadow-purple-900/40 hover:brightness-110 active:scale-95 transition-all"
+        className="mt-auto w-full bg-gradient-to-r from-purple-600 via-purple-500 to-fuchsia-500 py-4 rounded-2xl font-bold text-white uppercase tracking-wide shadow-lg shadow-purple-900/40 hover:brightness-110 active:scale-95 transition-all"
       >
         {currentStep.buttonText || 'Continuar'}
       </button>
@@ -242,8 +278,8 @@ export default function LessonScreen({ onExit }) {
         ))}
       </div>
       
-      <button 
-        onClick={onExit} 
+      <button
+        onClick={handleExit}
         className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
       >
         <RotateCcw size={20} />
@@ -267,7 +303,7 @@ export default function LessonScreen({ onExit }) {
     <div className="fixed inset-0 bg-[#0f0c29] z-50 flex flex-col font-sans">
       {/* Header: Barra de Progreso y Salir */}
       <div className="px-6 pt-6 pb-2 flex items-center gap-4 bg-[#0f0c29] shrink-0">
-        <button onClick={onExit} className="text-gray-400 hover:text-white transition-colors p-2 -ml-2 rounded-full hover:bg-white/10">
+        <button onClick={handleExit} className="text-gray-400 hover:text-white transition-colors p-2 -ml-2 rounded-full hover:bg-white/10">
           <X size={24} />
         </button>
         <div className="flex-1 h-3 bg-[#24243e] rounded-full overflow-hidden relative">
@@ -280,7 +316,7 @@ export default function LessonScreen({ onExit }) {
       </div>
 
       {/* Área de Contenido */}
-      <div className="flex-1 px-6 py-6 overflow-hidden">
+      <div className="flex-1 px-6 py-6 overflow-y-auto custom-scrollbar">
         {renderCurrentStep()}
       </div>
 
