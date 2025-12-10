@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { ChevronRight, X, Check, ArrowRight, RotateCcw, Target, Lightbulb, Image as ImageIcon } from 'lucide-react';
-
-// IMPORTANTE: Ruta ajustada a tu estructura de carpetas
-import { lessonData } from '../data/course/lessons/unit1/lesson1'; 
+import React, { useMemo, useState } from 'react';
+import { AlertCircle, ArrowRight, Check, Sparkles, X, Lightbulb, Image as ImageIcon, RotateCcw, Target } from 'lucide-react';
+// Importamos los datos desde la ruta correcta
+import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
 export default function LessonScreen({ onExit }) {
   const [stepIndex, setStepIndex] = useState(0);
@@ -10,26 +9,27 @@ export default function LessonScreen({ onExit }) {
   const [status, setStatus] = useState('idle'); // 'idle', 'correct', 'wrong'
   const [feedback, setFeedback] = useState('');
 
+  // Usamos los datos importados. Si fallan, usamos un array vacío para no romper la app.
+  const lessonData = lessonOneData || [];
+  
   // Fallback de seguridad
-  const data = lessonData || []; 
-  const currentStep = data[stepIndex];
-  const totalSteps = data.length;
+  const currentStep = lessonData[stepIndex];
+  const totalSteps = lessonData.length;
   const progress = totalSteps > 0 ? ((stepIndex + 1) / totalSteps) * 100 : 0;
 
-  if (!currentStep) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-[#0f0c29] text-white p-6 text-center">
-        <p className="text-xl font-bold mb-4">⚠️ No se encontró el contenido</p>
-        <p className="text-gray-400 mb-6">
-          Verifica que en <code>src/data/course/lessons/unit1/lesson1.js</code> 
-          estés exportando <code>lessonData</code>.
-        </p>
-        <button onClick={onExit} className="bg-red-500 py-2 px-4 rounded-lg">Salir</button>
-      </div>
-    );
-  }
+  // Estilos dinámicos para las etiquetas según el tipo
+  const currentType = currentStep?.type || 'theory';
+  const tagStyle = useMemo(() => ({
+    theory: 'bg-indigo-500/20 text-indigo-200 border-indigo-400/30',
+    quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
+    compare: 'bg-amber-500/15 text-amber-100 border-amber-400/30',
+    image_quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
+    summary: 'bg-emerald-500/15 text-emerald-100 border-emerald-400/30'
+  })[currentType] || 'bg-white/10 text-white border-white/20', [currentType]);
 
-  // --- LÓGICA DE NAVEGACIÓN ---
+  if (!currentStep) return <div className="text-white p-10 text-center">Cargando lección...</div>;
+
+  // --- LÓGICA ---
   const handleNext = () => {
     if (stepIndex < totalSteps - 1) {
       setStepIndex(prev => prev + 1);
@@ -37,7 +37,7 @@ export default function LessonScreen({ onExit }) {
       setSelectedOption(null);
       setFeedback('');
     } else {
-      onExit(); // Terminar lección
+      onExit(); // Salir
     }
   };
 
@@ -45,116 +45,114 @@ export default function LessonScreen({ onExit }) {
     if (status !== 'idle') return;
 
     setSelectedOption(option.id);
-    if (option.correct) {
+    const isCorrect = option.correct;
+    
+    // Usamos feedback específico o el general de la lección
+    const feedbackText = isCorrect 
+      ? (option.feedback || currentStep.feedbackCorrect || '¡Correcto!')
+      : (option.feedback || currentStep.feedbackWrong || 'Intenta de nuevo.');
+
+    if (isCorrect) {
       setStatus('correct');
-      setFeedback(currentStep.feedbackCorrect || option.feedback);
+      setFeedback(feedbackText);
     } else {
       setStatus('wrong');
-      setFeedback(currentStep.feedbackWrong || option.feedback);
+      setFeedback(feedbackText);
     }
   };
 
   // --- RENDERIZADORES ---
 
   const RenderTheory = () => (
-    <div className="flex flex-col h-full animate-in fade-in duration-500">
+    <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6">
       {currentStep.image && (
-        <div className="relative w-full h-64 shrink-0 rounded-2xl overflow-hidden mb-6 shadow-2xl border border-white/10 bg-black">
-          <img src={currentStep.image} alt="Theory" className="w-full h-full object-cover opacity-90" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0f0c29] via-transparent to-transparent"></div>
+        <div className="relative w-full min-h-[240px] max-h-[300px] rounded-3xl overflow-hidden border border-white/5 shadow-2xl bg-black shrink-0">
+          <img src={currentStep.image} alt="Inspiración" className="absolute inset-0 w-full h-full object-cover opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0f0c29] via-transparent to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-sm text-white/80">
+            <span className="px-3 py-1 rounded-full border border-white/20 bg-white/10 font-semibold backdrop-blur-md">
+              Inspiración visual
+            </span>
+            <Sparkles size={18} className="text-yellow-300 drop-shadow" />
+          </div>
         </div>
       )}
-      
-      <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-        <h2 className="text-2xl font-black text-white mb-4 leading-tight">{currentStep.title}</h2>
-        <div className="text-gray-300 text-lg leading-relaxed space-y-4">
-          {typeof currentStep.content === 'string' ? <p>{currentStep.content}</p> : currentStep.content}
+
+      <div className="bg-white/5 border border-white/10 rounded-3xl p-5 backdrop-blur flex-1 overflow-y-auto custom-scrollbar">
+        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${tagStyle} mb-3`}>
+          <span className="w-2 h-2 rounded-full bg-current" />
+          Lección teórica
         </div>
+        <h2 className="text-2xl font-black text-white mb-3 leading-tight">{currentStep.title}</h2>
+        <p className="text-gray-200 whitespace-pre-line leading-relaxed text-lg">
+          {currentStep.content}
+        </p>
         
         {currentStep.tip && (
-          <div className="mt-6 bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded-r-xl">
-            <div className="flex items-center gap-2 mb-2 text-yellow-400 font-bold uppercase text-xs tracking-wider">
-              <Lightbulb size={16} /> Tu Misión
+          <div className="mt-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-amber-100 flex gap-3 items-start">
+            <Lightbulb className="mt-1 shrink-0 text-amber-400" size={20} />
+            <div>
+              <p className="text-sm uppercase tracking-wide font-bold text-amber-400 mb-1">Tip Pro</p>
+              <p className="text-amber-50 leading-relaxed italic">{currentStep.tip}</p>
             </div>
-            <p className="text-yellow-100 italic text-base">"{currentStep.tip}"</p>
           </div>
         )}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-white/5">
-        <button onClick={handleNext} className="w-full bg-yellow-500 hover:bg-yellow-400 text-[#0f0c29] font-bold py-4 rounded-xl shadow-[0_4px_0_rgb(180,83,9)] active:translate-y-[4px] active:shadow-none transition-all flex items-center justify-center gap-2 uppercase tracking-wide">
-          {currentStep.buttonText || 'Continuar'} <ArrowRight size={20} />
-        </button>
-      </div>
+      <button
+        onClick={handleNext}
+        className="mt-auto w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-bold text-white uppercase tracking-wide shadow-lg shadow-purple-900/40 hover:brightness-110 active:scale-95 transition-all"
+      >
+        {currentStep.buttonText || 'Continuar'}
+      </button>
     </div>
   );
 
-  const RenderQuiz = () => (
+  const RenderQuiz = (useImages = false) => (
     <div className="flex flex-col h-full animate-in slide-in-from-right duration-500">
-      <div className="mb-8">
-        <span className="text-xs font-bold text-purple-400 uppercase tracking-widest bg-purple-500/10 px-3 py-1 rounded-full">Pregunta Rápida</span>
-        <h2 className="text-xl font-bold text-white mt-4 leading-relaxed">{currentStep.question}</h2>
+      <div className="mb-6">
+        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-semibold ${tagStyle} mb-2`}>
+          <span className="w-2 h-2 rounded-full bg-current" />
+          Quiz interactivo
+        </div>
+        {currentStep.title && <h2 className="text-xl font-bold text-white/60 mb-1">{currentStep.title}</h2>}
+        <h3 className="text-2xl font-black text-white leading-tight">{currentStep.question}</h3>
       </div>
-      
-      <div className="space-y-3 flex-1 overflow-y-auto custom-scrollbar">
-        {currentStep.options.map((opt) => {
-          let borderClass = 'border-white/10 hover:border-white/30 bg-white/5';
-          let textClass = 'text-gray-200';
-          
-          if (status !== 'idle' && opt.correct) {
-            borderClass = 'border-green-500 bg-green-500/20';
-            textClass = 'text-green-100';
-          } else if (status === 'wrong' && selectedOption === opt.id) {
-            borderClass = 'border-red-500 bg-red-500/20';
-            textClass = 'text-red-100';
-          } else if (status !== 'idle' && !opt.correct) {
-            borderClass = 'border-transparent opacity-40';
-          }
 
-          return (
+      {currentStep.image && useImages && (
+        <div className="relative w-full h-48 rounded-2xl overflow-hidden mb-6 border border-white/10 shadow-lg bg-black shrink-0">
+          <img src={currentStep.image} alt="Quiz Context" className="w-full h-full object-cover" />
+        </div>
+      )}
+
+      <div className={`gap-3 overflow-y-auto custom-scrollbar pb-4 ${useImages && !currentStep.image ? 'grid grid-cols-2' : 'flex flex-col flex-1'}`}>
+        {currentStep.options?.map((option) => {
+           let stateClass = "bg-white/5 border-white/10 hover:bg-white/10";
+           if (status !== 'idle' && option.correct) stateClass = "bg-emerald-500/20 border-emerald-500 text-emerald-100";
+           else if (status === 'wrong' && selectedOption === option.id) stateClass = "bg-red-500/20 border-red-500 text-red-100";
+           else if (status !== 'idle') stateClass = "opacity-40 border-transparent";
+
+           return (
             <button
-              key={opt.id}
-              onClick={() => handleValidation(opt)}
+              key={option.id}
+              onClick={() => handleValidation(option)}
               disabled={status !== 'idle'}
-              className={`w-full p-5 rounded-2xl text-left font-medium border-2 transition-all duration-200 ${borderClass} ${textClass}`}
+              className={`p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group ${stateClass}`}
             >
-              <div className="flex justify-between items-center">
-                <span>{opt.text}</span>
-                {status !== 'idle' && opt.correct && <Check className="text-green-400" size={20} />}
-                {status === 'wrong' && selectedOption === opt.id && <X className="text-red-400" size={20} />}
+              {useImages && option.src ? (
+                <div className="aspect-square rounded-xl overflow-hidden mb-2 bg-black/50">
+                   <img src={option.src} alt="" className="w-full h-full object-cover" />
+                </div>
+              ) : null}
+              
+              <div className="flex justify-between items-center relative z-10">
+                <span className="font-semibold text-lg">{option.text}</span>
+                {status !== 'idle' && option.correct && <Check className="text-emerald-400" />}
+                {status === 'wrong' && selectedOption === option.id && <X className="text-red-400" />}
               </div>
             </button>
-          );
+           );
         })}
-      </div>
-    </div>
-  );
-
-  const RenderCompare = () => (
-    <div className="flex flex-col h-full animate-in fade-in">
-      <h2 className="text-lg font-bold text-white mb-6 text-center">{currentStep.instruction}</h2>
-      <div className="grid grid-cols-1 gap-5 flex-1 overflow-y-auto pb-20 custom-scrollbar">
-        {currentStep.options.map((opt) => (
-          <div 
-            key={opt.id} 
-            onClick={() => handleValidation(opt)}
-            className={`relative rounded-2xl overflow-hidden border-4 h-48 cursor-pointer transition-all transform hover:scale-[1.02]
-              ${status === 'idle' ? 'border-transparent hover:border-purple-400' : ''}
-              ${status !== 'idle' && opt.correct ? 'border-green-500 ring-4 ring-green-500/30 z-10' : ''}
-              ${status === 'wrong' && selectedOption === opt.id ? 'border-red-500 opacity-80' : ''}
-              ${status !== 'idle' && !opt.correct && selectedOption !== opt.id ? 'opacity-30 grayscale' : ''}
-            `}
-          >
-            <img src={opt.src} alt="Opción" className="w-full h-full object-cover" />
-            {status !== 'idle' && (opt.correct || selectedOption === opt.id) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-                <div className={`p-3 rounded-full ${opt.correct ? 'bg-green-500' : 'bg-red-500'} text-white shadow-lg`}>
-                  {opt.correct ? <Check size={32} strokeWidth={4} /> : <X size={32} strokeWidth={4} />}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -205,19 +203,19 @@ export default function LessonScreen({ onExit }) {
       <p className="text-gray-400 mb-8">¡Dominaste el concepto!</p>
       
       <div className="w-full bg-[#24243e] rounded-2xl p-6 text-left space-y-4 mb-8 border border-white/5 shadow-lg">
-        {currentStep.points && currentStep.points.map((point, i) => (
+        {currentStep.points?.map((point, i) => (
           <div key={i} className="flex items-start gap-3">
-            <div className="bg-green-500/20 p-1 rounded-full mt-0.5">
-              <Check size={16} className="text-green-400" strokeWidth={3} />
+            <div className="bg-emerald-500/20 p-1 rounded-full mt-0.5 shrink-0">
+              <Check size={16} className="text-emerald-400" strokeWidth={3} />
             </div>
-            <span className="text-gray-200 font-medium">{point}</span>
+            <span className="text-gray-200 font-medium text-lg">{point}</span>
           </div>
         ))}
       </div>
       
       <button 
         onClick={onExit} 
-        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-[0_4px_0_rgb(21,128,61)] active:translate-y-[4px] active:shadow-none transition-all uppercase tracking-wide flex items-center justify-center gap-2"
+        className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
       >
         <RotateCcw size={20} />
         {currentStep.buttonText || 'Finalizar'}
@@ -230,9 +228,9 @@ export default function LessonScreen({ onExit }) {
       case 'theory': return <RenderTheory />;
       case 'quiz': return <RenderQuiz />;
       case 'compare': return <RenderCompare />;
-      case 'image_quiz': return <RenderImageQuiz />;
+      case 'image_quiz': return <RenderImageQuiz />; 
       case 'summary': return <RenderSummary />;
-      default: return <div className="text-white">Tipo de paso desconocido: {currentStep.type}</div>;
+      default: return <div className="text-white">Tipo desconocido: {currentStep.type}</div>;
     }
   };
 
