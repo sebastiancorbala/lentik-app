@@ -37,7 +37,7 @@ const IconMap = ({ name, className }) => {
   }
 };
 
-const LessonItem = ({ lesson, index, isCurrent, onStart, isAvailable }) => {
+const LessonItem = ({ lesson, index, isCurrent, onStart }) => {
   let icon;
   let colorClass = "bg-white/10 border border-white/5";
   let textClass = "text-white/60";
@@ -90,8 +90,6 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
     ? 0
     : currentLessonIndex;
 
-  const isAvailable = unit.status === 'current' || unit.status === 'completed';
-
   const headerColor = colorTheme === 'blue'
     ? 'bg-gradient-to-r from-[#6b8bff] via-[#5f7dff] to-[#5fc7ff]'
     : 'bg-gradient-to-r from-[#4ad3a3] via-[#43c498] to-[#4fdfb2]';
@@ -124,7 +122,6 @@ const UnitDetailCard = ({ unit, colorTheme, onClose, onStartLesson }) => {
               lesson={lesson}
               index={idx}
               isCurrent={idx === effectiveCurrentIndex}
-              isAvailable={isAvailable} 
               onStart={onStartLesson}
             />
           ))
@@ -147,11 +144,11 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
 
   let bgColor = baseGradient;
   let ringClass = "";
-  let IconComponent = () => <Camera className="w-8 h-8 text-[#2b1a00]" strokeWidth={3} />;
+  let iconElement = <Camera className="w-8 h-8 text-[#2b1a00]" strokeWidth={3} />;
 
   if (unit.status === 'completed') {
     bgColor = "bg-gradient-to-br from-[#ffda6b] via-[#ffc233] to-[#ffb300]";
-    IconComponent = () => <Check className="w-8 h-8 text-[#2b1a00]" strokeWidth={4} />;
+    iconElement = <Check className="w-8 h-8 text-[#2b1a00]" strokeWidth={4} />;
   } else {
     bgColor = `${baseGradient} opacity-90`;
   }
@@ -184,7 +181,7 @@ const UnitNode = ({ unit, isSelected, onSelect, onStartLesson, colorTheme }) => 
             active:translate-y-1 active:shadow-none z-30
           `}
         >
-           <IconComponent />
+          {iconElement}
         </button>
 
         <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70 font-bold uppercase tracking-wide text-xs">

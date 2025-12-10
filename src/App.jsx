@@ -133,13 +133,14 @@ export default function App() {
         {/* 3. PANTALLA DE LECCIÓN (Sobrepone todo) */}
         {currentScreen === 'lesson' && (
           <div className="absolute inset-0 z-50 bg-[#0f0c29]">
-             <LessonScreen
-               lessonMeta={currentLesson}
-               onExit={() => {
-                 setCurrentScreen('app');
-                 setCurrentLesson(null);
-               }}
-             />
+            <LessonScreen
+              key={currentLesson?.lessonId || 'lesson-screen'}
+              lessonMeta={currentLesson}
+              onExit={() => {
+                setCurrentScreen('app');
+                setCurrentLesson(null);
+              }}
+            />
           </div>
         )}
 
