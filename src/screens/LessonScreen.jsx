@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { AlertCircle, ArrowRight, Check, X } from 'lucide-react';
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
@@ -27,13 +27,6 @@ export default function LessonScreen({ lessonMeta, onExit }) {
   const lessonData = useMemo(() => {
     if (!lessonMeta?.lessonId) return fallbackLesson(lessonMeta);
     return lessonCatalog[lessonMeta.lessonId] ?? fallbackLesson(lessonMeta);
-  }, [lessonMeta]);
-
-  useEffect(() => {
-    setCurrentStep(0);
-    setStatus('idle');
-    setFeedback('');
-    setSelectedOption(null);
   }, [lessonMeta]);
 
   const totalSteps = lessonData.length;
@@ -84,12 +77,6 @@ export default function LessonScreen({ lessonMeta, onExit }) {
         const baseColor = node.type === 'test' ? 'border-amber-500 text-amber-300' : 'border-blue-500 text-blue-300';
         const fillColor = node.type === 'test' ? 'bg-amber-500/20' : 'bg-blue-500/20';
 
-        const displaySymbol = () => {
-          if (node.type === 'test') return 'T';
-          if (isDone || node.type === 'summary') return <Check size={16} />;
-          return null;
-        };
-
         return (
           <div key={node.id} className="flex flex-col items-center min-w-[56px]">
             <div
@@ -131,6 +118,12 @@ export default function LessonScreen({ lessonMeta, onExit }) {
       {currentData.title && (
         <h2 className="text-2xl font-bold text-white mb-4">{currentData.title}</h2>
       )}
+      {currentData.image && (
+        <div className="h-64 rounded-2xl overflow-hidden mb-4 border border-gray-800">
+          <img src={currentData.image} alt="Contenido de la pregunta" className="w-full h-full object-cover" />
+        </div>
+      )}
+      {currentData.instruction && <p className="text-gray-400 mb-2">{currentData.instruction}</p>}
       {currentData.question && <p className="text-gray-300 mb-4">{currentData.question}</p>}
       <div className={useImages ? 'grid grid-cols-2 gap-4' : 'flex flex-col gap-3'}>
         {currentData.options?.map((option) => (
