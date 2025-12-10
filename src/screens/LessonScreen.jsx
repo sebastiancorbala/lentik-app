@@ -1,7 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { AlertCircle, ArrowRight, Check, Sparkles, X, Lightbulb, Image as ImageIcon, RotateCcw, Target } from 'lucide-react';
-// Importamos los datos desde la ruta correcta. Usamos también el export default por si el named export falla.
-import lessonOneDataDefault, { lessonOneData as lessonOneDataNamed } from '../data/course/lessons/unit1/lesson1';
+import { 
+  AlertCircle, 
+  ArrowRight, 
+  Check, 
+  Sparkles, 
+  X, 
+  Lightbulb, 
+  Image as ImageIcon, 
+  RotateCcw, 
+  Target 
+} from 'lucide-react';
+
+// Importamos los datos desde la ruta correcta
+import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 
 export default function LessonScreen({ onExit = () => {} }) {
   const [stepIndex, setStepIndex] = useState(0);
@@ -9,17 +19,15 @@ export default function LessonScreen({ onExit = () => {} }) {
   const [status, setStatus] = useState('idle'); // 'idle', 'correct', 'wrong'
   const [feedback, setFeedback] = useState('');
 
-  // Usamos los datos importados. Si fallan, usamos un array vacío para no romper la app.
-  const lessonData = useMemo(() => {
-    const resolvedData = lessonOneDataNamed || lessonOneDataDefault;
-    return Array.isArray(resolvedData) ? resolvedData : [];
-  }, []);
-
-  const totalSteps = lessonData.length;
+  // Usamos los datos importados. Si fallan, usamos un array vacío.
+  const lessonData = lessonOneData || [];
+  
+  // Fallback de seguridad
   const currentStep = lessonData[stepIndex];
+  const totalSteps = lessonData.length;
   const progress = totalSteps > 0 ? ((stepIndex + 1) / totalSteps) * 100 : 0;
 
-  // Estilos dinámicos para las etiquetas según el tipo
+  // Estilos dinámicos para las etiquetas (Badges)
   const currentType = currentStep?.type || 'theory';
   const tagStyle = useMemo(() => ({
     theory: 'bg-indigo-500/20 text-indigo-200 border-indigo-400/30',
@@ -28,6 +36,8 @@ export default function LessonScreen({ onExit = () => {} }) {
     image_quiz: 'bg-cyan-500/15 text-cyan-100 border-cyan-400/30',
     summary: 'bg-emerald-500/15 text-emerald-100 border-emerald-400/30'
   })[currentType] || 'bg-white/10 text-white border-white/20', [currentType]);
+
+  if (!currentStep) return <div className="text-white p-10 text-center">Cargando lección...</div>;
 
   // --- LÓGICA ---
   const resetLessonState = () => {
@@ -42,35 +52,8 @@ export default function LessonScreen({ onExit = () => {} }) {
     onExit();
   };
 
-  useEffect(() => {
-    if (totalSteps === 0) return;
-    if (stepIndex >= totalSteps) {
-      resetLessonState();
-    }
-  }, [stepIndex, totalSteps]);
-
-  if (!currentStep) {
-    return (
-      <div className="fixed inset-0 bg-[#0f0c29] z-50 flex flex-col items-center justify-center text-center px-8">
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 max-w-sm w-full space-y-4">
-          <div className="w-12 h-12 rounded-full bg-yellow-500/20 border border-yellow-400/50 flex items-center justify-center mx-auto">
-            <AlertCircle className="text-yellow-300" />
-          </div>
-          <h2 className="text-white text-xl font-bold">Cargando lección...</h2>
-          <p className="text-gray-300 text-sm">Si algo falla, vuelve al mapa e inténtalo de nuevo.</p>
-          <button
-            onClick={handleExit}
-            className="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-fuchsia-500 py-3 rounded-xl font-semibold text-white hover:brightness-110 active:scale-95 transition-all"
-          >
-            Volver al mapa
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   const handleNext = () => {
-    if (stepIndex < totalSteps - 1) {
+    if (stepIndex < lessonData.length - 1) {
       setStepIndex(prev => prev + 1);
       setStatus('idle');
       setSelectedOption(null);
@@ -123,9 +106,9 @@ export default function LessonScreen({ onExit = () => {} }) {
           Lección teórica
         </div>
         <h2 className="text-2xl font-black text-white mb-3 leading-tight">{currentStep.title}</h2>
-        <p className="text-gray-200 whitespace-pre-line leading-relaxed text-lg">
+        <div className="text-gray-200 whitespace-pre-line leading-relaxed text-lg">
           {currentStep.content}
-        </p>
+        </div>
         
         {currentStep.tip && (
           <div className="mt-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-amber-100 flex gap-3 items-start">
@@ -154,8 +137,7 @@ export default function LessonScreen({ onExit = () => {} }) {
           <span className="w-2 h-2 rounded-full bg-current" />
           Quiz interactivo
         </div>
-        {currentStep.title && <h2 className="text-xl font-bold text-white/60 mb-1">{currentStep.title}</h2>}
-        <h3 className="text-2xl font-black text-white leading-tight">{currentStep.question}</h3>
+        <h2 className="text-2xl font-black text-white leading-tight">{currentStep.question}</h2>
       </div>
 
       {currentStep.image && useImages && (
@@ -176,7 +158,7 @@ export default function LessonScreen({ onExit = () => {} }) {
               key={option.id}
               onClick={() => handleValidation(option)}
               disabled={status !== 'idle'}
-              className={`p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group ${stateClass}`}
+              className={`p-4 rounded-2xl border-2 text-left transition-all relative overflow-hidden group text-white ${stateClass}`}
             >
               {useImages && option.src ? (
                 <div className="aspect-square rounded-xl overflow-hidden mb-2 bg-black/50">
@@ -184,8 +166,8 @@ export default function LessonScreen({ onExit = () => {} }) {
                 </div>
               ) : null}
               
-              <div className="flex justify-between items-center relative z-10">
-                <span className="font-semibold text-lg">{option.text}</span>
+              <div className="flex justify-between items-center relative z-10 text-white">
+                <span className="font-semibold text-lg leading-snug">{option.text}</span>
                 {status !== 'idle' && option.correct && <Check className="text-emerald-400" />}
                 {status === 'wrong' && selectedOption === option.id && <X className="text-red-400" />}
               </div>
@@ -197,29 +179,39 @@ export default function LessonScreen({ onExit = () => {} }) {
   );
 
   const RenderCompare = () => (
-    <div className="flex flex-col h-full animate-in fade-in">
-      <h2 className="text-lg font-bold text-white mb-6 text-center">{currentStep.instruction}</h2>
-      <div className="grid grid-cols-1 gap-5 flex-1 overflow-y-auto pb-20 custom-scrollbar">
+    <div className="flex flex-col h-full animate-in fade-in duration-500">
+      <div className="mb-6 text-center">
+        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${tagStyle} mb-3`}>
+          <span className="w-2 h-2 rounded-full bg-current" />
+          Comparación visual
+        </div>
+        <h2 className="text-xl font-black text-white leading-tight">{currentStep.instruction}</h2>
+        <p className="text-gray-400 text-sm mt-2">Elige la foto con un sujeto claro.</p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 flex-1 overflow-y-auto pb-2 custom-scrollbar">
         {currentStep.options.map((opt) => (
-          <div 
+          <button 
             key={opt.id} 
             onClick={() => handleValidation(opt)}
-            className={`relative rounded-2xl overflow-hidden border-4 h-48 cursor-pointer transition-all transform hover:scale-[1.02]
-              ${status === 'idle' ? 'border-transparent hover:border-purple-400' : ''}
-              ${status !== 'idle' && opt.correct ? 'border-green-500 ring-4 ring-green-500/30 z-10' : ''}
-              ${status === 'wrong' && selectedOption === opt.id ? 'border-red-500 opacity-80' : ''}
-              ${status !== 'idle' && !opt.correct && selectedOption !== opt.id ? 'opacity-30 grayscale' : ''}
+            disabled={status !== 'idle'}
+            className={`relative rounded-3xl overflow-hidden border-4 h-52 transition-all transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-yellow-400/70 w-full
+              ${status === 'idle' ? 'border-transparent hover:border-purple-400/60' : ''}
+              ${status !== 'idle' && opt.correct ? 'border-emerald-500 ring-4 ring-emerald-500/30 z-10' : ''}
+              ${status === 'wrong' && selectedOption === opt.id ? 'border-red-500 opacity-90' : ''}
+              ${status !== 'idle' && !opt.correct && selectedOption !== opt.id ? 'opacity-40 grayscale' : ''}
             `}
           >
-            <img src={opt.src} alt="Opción" className="w-full h-full object-cover" />
+            <img src={opt.src} alt="Opción de comparación" className="w-full h-full object-cover" />
+
             {status !== 'idle' && (opt.correct || selectedOption === opt.id) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-                <div className={`p-3 rounded-full ${opt.correct ? 'bg-green-500' : 'bg-red-500'} text-white shadow-lg`}>
+              <div className="absolute inset-0 flex items-center justify-center bg-black/55 backdrop-blur-[2px]">
+                <div className={`p-3 rounded-full ${opt.correct ? 'bg-emerald-500' : 'bg-red-500'} text-white shadow-lg`}>
                   {opt.correct ? <Check size={32} strokeWidth={4} /> : <X size={32} strokeWidth={4} />}
                 </div>
               </div>
             )}
-          </div>
+          </button>
         ))}
       </div>
     </div>
@@ -281,8 +273,8 @@ export default function LessonScreen({ onExit = () => {} }) {
         ))}
       </div>
       
-      <button
-        onClick={handleExit}
+      <button 
+        onClick={handleExit} 
         className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
       >
         <RotateCcw size={20} />
@@ -312,7 +304,7 @@ export default function LessonScreen({ onExit = () => {} }) {
         <div className="flex-1 h-3 bg-[#24243e] rounded-full overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-[1px] bg-white/10 z-10"></div>
           <div 
-            className="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+            className="h-full bg-gradient-to-r from-purple-500 via-blue-400 to-cyan-300 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]"
             style={{ width: `${progress}%` }}
           />
         </div>
