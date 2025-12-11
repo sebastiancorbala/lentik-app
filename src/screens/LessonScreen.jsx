@@ -13,15 +13,23 @@ import {
 
 // Importamos los datos desde la ruta correcta
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
+import { lessonTwoData } from '../data/course/lessons/unit1/lesson2';
 
-export default function LessonScreen({ onExit = () => {} }) {
+const lessonsById = {
+  'U1-L1': lessonOneData,
+  'U1-L2': lessonTwoData
+};
+
+export default function LessonScreen({ onExit = () => {}, lessonMeta = {} }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [status, setStatus] = useState('idle'); // 'idle', 'correct', 'wrong'
   const [feedback, setFeedback] = useState('');
 
+  const selectedLessonData = lessonMeta.lessonId ? lessonsById[lessonMeta.lessonId] : null;
+
   // Usamos los datos importados. Si fallan, usamos un array vacío.
-  const lessonData = lessonOneData || [];
+  const lessonData = selectedLessonData || lessonOneData || [];
   
   // Fallback de seguridad
   const currentStep = lessonData[stepIndex];
