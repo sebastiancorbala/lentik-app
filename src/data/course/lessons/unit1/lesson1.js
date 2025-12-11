@@ -4,7 +4,7 @@ export const lessonOneData = [
     type: 'theory',
     title: "Todo necesita un protagonista",
     content: "Imagina una película donde no sabes quién es el personaje principal. Sería confusa y aburrida, ¿verdad?\n\nLo mismo ocurre con la fotografía. Cuando miramos una imagen, nuestros ojos buscan instintivamente un punto donde concentrarnos.",
-    image: "https://github.com/user-attachments/assets/2d1faa4c-9f2b-487d-8f27-aefc760e0a5a ",
+    image: "https://github.com/user-attachments/assets/2d1faa4c-9f2b-487d-8f27-aefc760e0a5a",
     buttonText: "Siguiente"
   },
   {
@@ -12,7 +12,7 @@ export const lessonOneData = [
     type: 'theory',
     title: "El error del principiante",
     content: "El error número 1 es intentar fotografiar 'todo a la vez': el paisaje, tu amigo, el perro y el coche... todo en el mismo encuadre. Si todo es importante, nada lo es.\n\nPor eso debes tener claro qué buscar fotografiar. Saber por qué haces la foto y qué quieres capturar.",
-   // (esta pagina no tendrá esta imagen) image: "https://images.unsplash.com/photo-1546452230-0a2a4b087095?q=80&w=800&auto=format&fit=crop",
+    // image: "https://images.unsplash.com/photo-1546452230-0a2a4b087095?q=80&w=800&auto=format&fit=crop",
     tip: 'Antes de disparar, pregúntate: "¿De qué trata esta foto?". Elige UN solo elemento (tu Sujeto) y dale prioridad.',
     buttonText: "Entendido"
   },
@@ -32,7 +32,7 @@ export const lessonOneData = [
   {
     id: 4,
     type: 'compare',
-    instruction: "Toca la foto que tiene un Sujeto Principal claro.",
+    instruction: "Práctica 1: Toca la foto que tiene un Sujeto Principal claro.",
     options: [
       {
         id: 'a',
@@ -50,6 +50,44 @@ export const lessonOneData = [
   },
   {
     id: 5,
+    type: 'compare',
+    instruction: "Práctica 2: ¿Cuál de estas fotos separa mejor al sujeto del fondo?",
+    options: [
+      {
+        id: 'a',
+        src: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=600&auto=format&fit=crop",
+        correct: true,
+        feedback: "¡Excelente! El fondo simple y desenfocado hace que la chica destaque inmediatamente."
+      },
+      {
+        id: 'b',
+        src: "https://images.unsplash.com/photo-1555861496-0666c8981751?q=80&w=600&auto=format&fit=crop",
+        correct: false,
+        feedback: "Aquí el sujeto se pierde entre las luces, los carteles y la gente del fondo."
+      }
+    ]
+  },
+  {
+    id: 6,
+    type: 'compare',
+    instruction: "Práctica 3: Toca la imagen donde el sujeto resalta claramente por contraste.",
+    options: [
+      {
+        id: 'a',
+        src: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?q=80&w=600&auto=format&fit=crop",
+        correct: true,
+        feedback: "¡Correcto! El contraste de colores separa al sujeto del entorno."
+      },
+      {
+        id: 'b',
+        src: "https://images.unsplash.com/photo-1504194921103-f8b80cadd5e4?q=80&w=600&auto=format&fit=crop",
+        correct: false,
+        feedback: "Aquí los colores son muy similares y el sujeto no destaca tanto."
+      }
+    ]
+  },
+  {
+    id: 7,
     type: 'image_quiz',
     instruction: "Analiza esta fotografía:",
     image: "https://images.unsplash.com/photo-1610649758203-eaaa7d636ade?q=80&w=1170&auto=format&fit=crop",
@@ -63,13 +101,13 @@ export const lessonOneData = [
     feedbackWrong: "Busca lo que más resalta por color y contraste."
   },
   {
-    id: 6,
+    id: 8,
     type: 'summary',
     title: "¡Lección Completada!",
     points: [
-      "Toda foto necesita un 'Protagonista'.",
-      "A veces menos es más: simplifica tu encuadre.",
-      "Si el sujeto no está claro, acércate más."
+      " Toda foto necesita un 'Protagonista'.",
+      " A veces menos es más: simplifica tu encuadre.",
+      " Si el sujeto no está claro, acércate más."
     ],
     buttonText: "Finalizar Lección"
   }
