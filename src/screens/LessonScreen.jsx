@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { 
-  AlertCircle, 
-  ArrowRight, 
-  Check, 
+import {
+  AlertCircle,
+  ArrowRight,
+  Check,
   Sparkles, 
   X, 
   Lightbulb, 
@@ -14,10 +14,12 @@ import {
 // Importamos los datos desde la ruta correcta
 import { lessonOneData } from '../data/course/lessons/unit1/lesson1';
 import { lessonTwoData } from '../data/course/lessons/unit1/lesson2';
+import { lessonThreeData } from '../data/course/lessons/unit1/lesson3';
 
 const lessonsById = {
   'U1-L1': lessonOneData,
-  'U1-L2': lessonTwoData
+  'U1-L2': lessonTwoData,
+  'U1-L3': lessonThreeData
 };
 
 export default function LessonScreen({ onExit = () => {}, lessonMeta = {} }) {
